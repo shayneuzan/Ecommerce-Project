@@ -1,0 +1,19 @@
+# Dependencies
+/vendor/
+
+# Environment variables (never commit real credentials)
+.env
+
+# IDE
+/.idea/
+/.vscode/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Twig cache, temporary files
+/var/cache
+
