@@ -1,5 +1,4 @@
 -- Traventa Database Schema
--- Run this once in phpMyAdmin before starting the application
 
 CREATE TABLE IF NOT EXISTS destination (
     id INT AUTO_INCREMENT PRIMARY KEY,
