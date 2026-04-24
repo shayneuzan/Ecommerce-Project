@@ -6,6 +6,7 @@ use Slim\Factory\AppFactory;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 use RedBeanPHP\R;
+use App\Database;
 
 require __DIR__ . '/vendor/autoload.php';
 
@@ -17,12 +18,8 @@ $dotenv->load();
 // RedBeanPHP setup goes here (MariaDB connection using .env values)
 // Will be configured later 
 
-R::setup(
-    'mysql:host=' . $_ENV['DB_HOST'] . ';dbname=' . $_ENV['DB_NAME'],
-    $_ENV['DB_USER'],
-    $_ENV['DB_PASS']
-);
-R::freeze(false);
+App\Database::connect();
+App\Database::seed();
 
 
 // ─── 3. TEMPLATE ENGINE ───────────────────────────────────────────────────────
