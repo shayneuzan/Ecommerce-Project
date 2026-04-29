@@ -1,0 +1,210 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+:root {
+    --navy: #0f1f3d;
+    --navy-light: #1a3260;
+    --teal: #0a9396;
+    --teal-light: #94d2bd;
+}
+
+body {
+    font-family: 'DM Sans', sans-serif;
+    background: #f8f7f4;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* ── Navbar ── */
+.bg-navy { background-color: var(--navy) !important; }
+
+.navbar-brand {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    letter-spacing: -0.3px;
+}
+
+.lang-switcher {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+}
+
+.lang-switcher a {
+    color: rgba(255,255,255,0.5);
+    text-decoration: none;
+    padding: 0.2rem 0.3rem;
+    border-radius: 4px;
+    transition: color 0.2s;
+}
+
+.lang-switcher a:hover { color: #fff; }
+.lang-switcher a.active { color: var(--teal-light); }
+.lang-switcher span { color: rgba(255,255,255,0.3); }
+
+/* ── Buttons ── */
+.btn-teal {
+    background-color: var(--teal);
+    color: #fff;
+    border: none;
+}
+
+.btn-teal:hover {
+    background-color: var(--navy-light);
+    color: #fff;
+}
+
+.btn-outline-navy {
+    border: 2px solid var(--navy);
+    color: var(--navy);
+    background: transparent;
+}
+
+.btn-outline-navy:hover {
+    background: var(--navy);
+    color: #fff;
+}
+
+/* ── Hero ── */
+.hero {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 50%, #0e3d4f 100%);
+    color: #fff;
+    padding: 5rem 0;
+}
+
+.hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+    white-space: nowrap;
+}
+
+.text-teal { color: var(--teal-light) !important; }
+
+.hero-subtitle {
+    font-size: 1.1rem;
+    opacity: 0.8;
+    font-weight: 300;
+    margin-bottom: 2rem;
+}
+
+/* ── Section titles ── */
+.section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.9rem;
+    font-weight: 700;
+    color: var(--navy);
+}
+
+/* ── Package cards ── */
+.package-card {
+    border-radius: 16px;
+    border: 1px solid #e2e0db;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    overflow: hidden;
+}
+
+.package-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+}
+
+.package-card-img {
+    height: 200px;
+    object-fit: cover;
+}
+
+.package-destination {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--teal);
+    margin-bottom: 0.4rem;
+}
+
+.package-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--navy);
+}
+
+.price-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #a09e97;
+}
+
+.price-value {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--navy);
+}
+
+.price-per {
+    font-size: 0.8rem;
+    font-weight: 400;
+    color: #6b6963;
+}
+
+/* ── Footer ── */
+.footer { background-color: var(--navy) !important; }
+
+.footer-brand {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+}
+
+.footer-link:hover { color: var(--teal-light) !important; }
+
+/* ── Auth card ── */
+.auth-wrapper {
+    min-height: calc(100vh - 68px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.auth-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 2.5rem;
+    width: 100%;
+    max-width: 440px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+    border: 1px solid #e2e0db;
+}
+
+.auth-card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--navy);
+}
+
+/* ── Page header ── */
+.page-header {
+    background: #fff;
+    border-bottom: 1px solid #e2e0db;
+    padding: 2.5rem 0;
+}
+
+.page-header-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--navy);
+}
+
+/* ── Forms ── */
+.form-control:focus, .form-select:focus {
+    border-color: var(--teal);
+    box-shadow: 0 0 0 3px rgba(10,147,150,0.12);
+}

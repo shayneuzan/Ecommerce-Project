@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+session_start();
+
 use Slim\Factory\AppFactory;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
@@ -60,8 +62,22 @@ $app->addErrorMiddleware(true, true, true);
 // ─── 7. ROUTES ────────────────────────────────────────────────────────────────
 // Routes will be added here as each feature is built
 
-$app->get('/', function ($request, $response) {
-    $response->getBody()->write('<h1>Traventa is running!</h1>');
+$app->get('/', function ($request, $response) use ($twig, $basePath) {
+    $packages = \RedBeanPHP\R::findAll('package', 'LIMIT 4'); //limit to 4 packages as starter
+
+    //Attach destination city to each package
+    foreach ($packages as $package) {
+        $destination = \RedBeanPHP\R::load('destination', $package->destination_id);
+        $package->city = $destination->city;
+    }
+
+    $html = $twig->render('home.html.twig', [
+        'base_path' => $basePath,
+        'app_lang'  => $_SESSION['lang'] ?? 'en',
+        'packages'  => $packages,
+    ]);
+
+    $response->getBody()->write($html);
     return $response;
 });
 

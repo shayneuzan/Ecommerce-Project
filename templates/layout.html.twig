@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="{{ app_lang ?? 'en' }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Traventa{% endblock %} — Vacation Packages</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ base_path }}/assets/css/style.css">
+    {% block head %}{% endblock %}
+</head>
+<body>
+
+    {# ── Flash messages ── #}
+    {% if flash is defined %}
+        {% for type, messages in flash %}
+            {% for message in messages %}
+                <div class="alert alert-{{ type }} alert-dismissible fade show mb-0 rounded-0" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        {% endfor %}
+    {% endif %}
+
+    {# ── Navbar ── #}
+    <nav class="navbar navbar-expand-lg navbar-dark bg-navy sticky-top">
+        <div class="container">
+
+            <a class="navbar-brand fw-bold" href="{{ base_path }}/">
+                Traventa
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarMain">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ base_path }}/packages">Packages</a>
+                    </li>
+                    {% if app_authenticated ?? false %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ base_path }}/bookings">My Bookings</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ base_path }}/favourites">Favourites</a>
+                        </li>
+                    {% endif %}
+                    {% if app_role is defined and app_role == 'admin' %}
+                        <li class="nav-item">
+                            <a class="nav-link text-warning" href="{{ base_path }}/admin">Admin</a>
+                        </li>
+                    {% endif %}
+                </ul>
+
+                <div class="d-flex align-items-center gap-3">
+
+                    <div class="lang-switcher">
+                        <a href="{{ base_path }}/lang/en" class="{{ (app_lang ?? 'en') == 'en' ? 'active' : '' }}">EN</a>
+                        <span>|</span>
+                        <a href="{{ base_path }}/lang/fr" class="{{ (app_lang ?? 'en') == 'fr' ? 'active' : '' }}">FR</a>
+                    </div>
+
+                    {% if app_authenticated ?? false %}
+                        <span class="text-white-50 small">{{ app_user_name ?? 'Account' }}</span>
+                        <form action="{{ base_path }}/auth/logout" method="POST">
+                            <button type="submit" class="btn btn-outline-light btn-sm">Logout</button>
+                        </form>
+                    {% else %}
+                        <a href="{{ base_path }}/auth/login" class="btn btn-outline-light btn-sm">Login</a>
+                        <a href="{{ base_path }}/auth/register" class="btn btn-teal btn-sm">Sign Up</a>
+                    {% endif %}
+
+                </div>
+            </div>
+
+        </div>
+    </nav>
+
+    {# ── Page content ── #}
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    {# ── Footer ── #}
+    <footer class="footer bg-navy text-white mt-auto py-5">
+        <div class="container text-center">
+            <p class="footer-brand mb-1">Traventa</p>
+            <p class="text-white-50 small mb-3">Your next adventure is one click away.</p>
+            <div class="d-flex justify-content-center gap-4 mb-3">
+                <a href="{{ base_path }}/packages" class="text-white-50 small text-decoration-none footer-link">Packages</a>
+                <a href="{{ base_path }}/auth/login" class="text-white-50 small text-decoration-none footer-link">Login</a>
+                <a href="{{ base_path }}/auth/register" class="text-white-50 small text-decoration-none footer-link">Sign Up</a>
+            </div>
+            <p class="text-white-50 small mb-0">&copy; {{ "now"|date("Y") }} Traventa — eCommerce Winter 2026</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>
