@@ -1,0 +1,125 @@
+{# //single package detail page (image, hotel, guide, booking sidebar  #}
+
+
+{% extends "layout.html.twig" %}
+
+{% block title %}{{ package.title }}{% endblock %}
+
+{% block content %}
+
+<section class="page-hero">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ base_path }}/" class="text-dark">Home</a></li>
+                <li class="breadcrumb-item"><a href="{{ base_path }}/packages" class="text-dark">Packages</a></li>
+                <li class="breadcrumb-item active text-dark">{{ package.title }}</li>
+            </ol>
+        </nav>
+        <h1 class="page-hero-title">{{ package.title }}</h1>
+        <p class="page-hero-subtitle">{{ package.city }}, {{ package.country }}</p>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="row g-4">
+
+            {# ── Package image and details ── #}
+            <div class="col-lg-8">
+                <img
+                    src="{{ package.image_url ?? 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800' }}"
+                    alt="{{ package.title }}"
+                    class="img-fluid rounded-3 mb-4 w-100 package-detail-img"
+                >
+
+                <h4 class="section-title mb-3">About this package</h4>
+                <p class="text-muted">{{ package.description }}</p>
+
+                <hr class="my-4">
+
+                {# ── Hotel, guide and destination info cards ── #}
+                <div class="row g-3 mt-2">
+                    <div class="col-md-4">
+                        <div class="detail-card">
+                            <div class="detail-card-label">Hotel</div>
+                            <div class="detail-card-value">{{ package.hotel_name }}</div>
+                            <div class="detail-card-sub">{{ package.hotel_address }}</div>
+                            <div class="detail-card-sub">Rating: {{ package.hotel_rating }}/5</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="detail-card">
+                            <div class="detail-card-label">Tour Guide</div>
+                            <div class="detail-card-value">{{ package.guide_name }}</div>
+                            <div class="detail-card-sub">{{ package.guide_language }}</div>
+                            <div class="detail-card-sub">Guide fee: ${{ package.guide_price }}</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="detail-card">
+                            <div class="detail-card-label">Destination</div>
+                            <div class="detail-card-value">{{ package.city }}</div>
+                            <div class="detail-card-sub">{{ package.country }}</div>
+                            <div class="detail-card-sub">{{ package.destination_description }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {# ── Booking sidebar ── #}
+            <div class="col-lg-4">
+                <div class="booking-card">
+                    <div class="booking-card-price">
+                        <span class="price-label1">Price per person:</span>
+                        <br>
+                        <span class="price-label">Adult price (12+)</span>
+                        <span class="booking-price-value">${{ package.price }}</span>
+                        <br>
+                        <span class="price-label mt-2">Child price (under 12)</span>
+                        <span class="booking-price-value">${{ package.price_child }}</span>
+                    </div>
+
+                    <hr>
+
+                    {# ── Package summary details ── #}
+                    <ul class="list-unstyled">
+                        <li class="d-flex justify-content-between mb-2">
+                            <span class="text-muted small">Duration</span>
+                            <span class="small fw-semibold">{{ package.duration_days }} days</span>
+                        </li>
+                        <li class="d-flex justify-content-between mb-2">
+                            <span class="text-muted small">Slots available</span>
+                            <span class="small fw-semibold">{{ package.available_slots }}</span>
+                        </li>
+                        <li class="d-flex justify-content-between mb-2">
+                            <span class="text-muted small">Hotel</span>
+                            <span class="small fw-semibold">{{ package.hotel_name }}</span>
+                        </li>
+                        <li class="d-flex justify-content-between mb-2">
+                            <span class="text-muted small">Guide</span>
+                            <span class="small fw-semibold">{{ package.guide_name }}</span>
+                        </li>
+                    </ul>
+
+                    <hr>
+
+                    {# show book now if logged in, otherwise prompt to login #}
+                    {% if app_authenticated ?? false %}
+                        <a href="{{ base_path }}/bookings/create/{{ package.id }}" class="btn btn-teal btn-lg w-100">Book Now</a>
+                    {% else %}
+                        <a href="{{ base_path }}/auth/login" class="btn btn-teal btn-lg w-100">Login to Book</a>
+                        <p class="text-center text-muted small mt-2">
+                            No account? <a href="{{ base_path }}/auth/register" class="text-teal-link">Sign up free</a>
+                        </p>
+                    {% endif %}
+
+                    <a href="{{ base_path }}/packages" class="btn btn-outline-secondary w-100 mt-2">Back to Packages</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+{% endblock %}

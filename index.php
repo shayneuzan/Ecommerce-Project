@@ -9,6 +9,8 @@ use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 use RedBeanPHP\R;
 use App\Database;
+use App\Controllers\PackageController;
+use App\Models\PackageModel;
 
 require __DIR__ . '/vendor/autoload.php';
 
@@ -37,6 +39,13 @@ $basePath = $_ENV['APP_BASE_PATH'] ?? '/traventa';
 $container = new \DI\Container();
 $container->set(Environment::class, $twig);
 
+//register the package controller with its dependencies
+$container->set(PackageController::class, fn() => new PackageController(
+    $twig,
+    new PackageModel(),
+    $basePath
+));
+
 // Controllers will be registered here as the project grows
 
 // ─── 5. APPLICATION ───────────────────────────────────────────────────────────
@@ -62,10 +71,11 @@ $app->addErrorMiddleware(true, true, true);
 // ─── 7. ROUTES ────────────────────────────────────────────────────────────────
 // Routes will be added here as each feature is built
 
+// ─── 7. ROUTES ────────────────────────────────────────────────────────────────
 $app->get('/', function ($request, $response) use ($twig, $basePath) {
     $packages = \RedBeanPHP\R::findAll('package', 'LIMIT 4'); //limit to 4 packages as starter
 
-    //Attach destination city to each package
+    //attach destination city to each package
     foreach ($packages as $package) {
         $destination = \RedBeanPHP\R::load('destination', $package->destination_id);
         $package->city = $destination->city;
@@ -79,6 +89,32 @@ $app->get('/', function ($request, $response) use ($twig, $basePath) {
 
     $response->getBody()->write($html);
     return $response;
+});
+
+//packages listing and detail pages
+$app->get('/packages',      [PackageController::class, 'index']);
+$app->get('/packages/{id}', [PackageController::class, 'show']);
+
+//API endpoint for AJAX live search
+$app->get('/api/packages/search', function ($request, $response) {
+    $params   = $request->getQueryParams();
+    $query    = trim($params['q'] ?? '');
+    $model    = new \App\Models\PackageModel();
+    $packages = $query ? $model->search($query) : $model->findAll();
+
+    $payload = array_map(fn($p) => [
+        'id'              => (int) $p->id,
+        'title'           => $p->title,
+        'description'     => $p->description,
+        'price'           => $p->price,
+        'duration_days'   => (int) $p->duration_days,
+        'available_slots' => (int) $p->available_slots,
+        'image_url'       => $p->image_url,
+        'city'            => $p->city,
+    ], array_values($packages));
+
+    $response->getBody()->write(json_encode($payload, JSON_THROW_ON_ERROR));
+    return $response->withHeader('Content-Type', 'application/json');
 });
 
 // ─── 8. RUN ───────────────────────────────────────────────────────────────────

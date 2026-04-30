@@ -16,7 +16,7 @@ body {
 }
 
 /* ── Navbar ── */
-.bg-navy { background-color: var(--navy) !important; }
+.bg-navy { background-color: var(--navy) !important;}
 
 .navbar-brand {
     font-family: 'Playfair Display', serif;
@@ -133,6 +133,13 @@ body {
     color: var(--navy);
 }
 
+.price-label1 {
+    font-size: 4 rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: black;
+}
+
 .price-label {
     font-size: 0.7rem;
     text-transform: uppercase;
@@ -203,8 +210,108 @@ body {
     color: var(--navy);
 }
 
+.page-hero {
+    padding-top: 2rem;
+}
+
 /* ── Forms ── */
 .form-control:focus, .form-select:focus {
     border-color: var(--teal);
     box-shadow: 0 0 0 3px rgba(10,147,150,0.12);
+}
+
+/* ── Filter sidebar ── */
+.filter-card {
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid #e2e0db;
+    padding: 1.5rem;
+    position: sticky;
+    top: 90px;
+}
+
+.filter-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid #e2e0db;
+}
+
+.filter-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #6b6963;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: block;
+    margin-bottom: 0.4rem;
+}
+
+/* ── Package detail page ── */
+
+.detail-card {
+    background: #f8f7f4;
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+    border: 1px solid #e2e0db;
+    height: 100%;
+}
+
+.detail-card-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--teal);
+    margin-bottom: 0.4rem;
+}
+
+.detail-card-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 0.25rem;
+}
+
+.detail-card-sub {
+    font-size: 0.8rem;
+    color: #6b6963;
+    line-height: 1.5;
+}
+
+/* ── Booking sidebar card ── */
+.booking-card {
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid #e2e0db;
+    padding: 1.75rem;
+    position: sticky;
+    top: 90px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+}
+
+.booking-card-price {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0.5rem;
+}
+
+.booking-price-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--navy);
+    font-family: 'Playfair Display', serif;
+}
+
+.text-teal-link {
+    color: var(--teal);
+    text-decoration: none;
+}
+
+.text-teal-link:hover {
+    text-decoration: underline;
 }

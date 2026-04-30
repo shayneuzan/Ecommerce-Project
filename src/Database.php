@@ -187,7 +187,7 @@ class Database
         $guide8->price = 125.00;
         R::store($guide8);
 
-        // Packages
+        //Packages
         $pkg1 = R::dispense('package');
         $pkg1->destination_id = $paris->id;
         $pkg1->hotel_id = $hotel1->id;
@@ -196,6 +196,8 @@ class Database
         $pkg1->description = 'Experience the magic of Paris with a luxury stay and guided tour of the Eiffel Tower, Louvre and Montmartre.';
         $pkg1->duration_days = 5;
         $pkg1->price = 1299.00;
+        $pkg1->price_child = 779.00; //40% off adult price for children under 12
+        $pkg1->min_age = 0; //no minimum age
         $pkg1->available_slots = 10;
         $pkg1->image_url = 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800';
         R::store($pkg1);
@@ -208,6 +210,8 @@ class Database
         $pkg2->description = 'Discover London\'s iconic landmarks including Big Ben, Buckingham Palace and the Tower of London.';
         $pkg2->duration_days = 4;
         $pkg2->price = 999.00;
+        $pkg2->price_child = 599.00;
+        $pkg2->min_age = 0;
         $pkg2->available_slots = 15;
         $pkg2->image_url = 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=800';
         R::store($pkg2);
@@ -220,6 +224,8 @@ class Database
         $pkg3->description = 'Immerse yourself in Japanese culture with visits to ancient temples, sushi markets and Mount Fuji.';
         $pkg3->duration_days = 7;
         $pkg3->price = 1599.00;
+        $pkg3->price_child = 959.00;
+        $pkg3->min_age = 0;
         $pkg3->available_slots = 8;
         $pkg3->image_url = 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=800';
         R::store($pkg3);
@@ -232,6 +238,8 @@ class Database
         $pkg4->description = 'Walk through history with visits to the Colosseum, Roman Forum, Vatican Museums and the Sistine Chapel.';
         $pkg4->duration_days = 6;
         $pkg4->price = 1199.00;
+        $pkg4->price_child = 719.00;
+        $pkg4->min_age = 0;
         $pkg4->available_slots = 12;
         $pkg4->image_url = 'https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=800';
         R::store($pkg4);
@@ -244,6 +252,8 @@ class Database
         $pkg5->description = 'Explore Gaudi\'s masterpieces, stroll Las Ramblas, relax on Barceloneta beach and enjoy tapas tours.';
         $pkg5->duration_days = 5;
         $pkg5->price = 1099.00;
+        $pkg5->price_child = 659.00;
+        $pkg5->min_age = 0;
         $pkg5->available_slots = 12;
         $pkg5->image_url = 'https://images.unsplash.com/photo-1539037116277-4db20889f2d4?w=800';
         R::store($pkg5);
@@ -256,6 +266,8 @@ class Database
         $pkg6->description = 'Unwind in paradise with rice terrace treks, temple visits, traditional Balinese spa treatments and sunset dinners.';
         $pkg6->duration_days = 8;
         $pkg6->price = 1399.00;
+        $pkg6->price_child = 839.00;
+        $pkg6->min_age = 0;
         $pkg6->available_slots = 10;
         $pkg6->image_url = 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800';
         R::store($pkg6);
@@ -268,6 +280,8 @@ class Database
         $pkg7->description = 'Live like royalty with a Burj Khalifa visit, desert safari, luxury mall tours and a dhow cruise dinner.';
         $pkg7->duration_days = 5;
         $pkg7->price = 1899.00;
+        $pkg7->price_child = 1139.00;
+        $pkg7->min_age = 4; //minimum age 4 for desert safari activities
         $pkg7->available_slots = 8;
         $pkg7->image_url = 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800';
         R::store($pkg7);
@@ -280,6 +294,8 @@ class Database
         $pkg8->description = 'Experience the best of NYC with visits to Times Square, Central Park, the Statue of Liberty and Broadway.';
         $pkg8->duration_days = 6;
         $pkg8->price = 1799.00;
+        $pkg8->price_child = 1079.00;
+        $pkg8->min_age = 0;
         $pkg8->available_slots = 10;
         $pkg8->image_url = 'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=800';
         R::store($pkg8);

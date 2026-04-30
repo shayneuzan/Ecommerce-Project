@@ -1,0 +1,146 @@
+
+{# All packages page, 8 cards #}
+
+{% extends "layout.html.twig" %}
+
+{% block title %}Packages{% endblock %}
+
+{% block content %}
+
+{# hidden input so our JS file can read the base path without hardcoding it #}
+<input type="hidden" id="base-path" value="{{ base_path }}">
+
+{# ── Page hero ── #}
+<section class="page-hero">
+    <div class="container">
+        <h1 class="page-hero-title">Vacation Packages</h1>
+        <p class="page-hero-subtitle">Find your perfect trip from our handpicked collection</p>
+        <div class="row justify-content-center mt-3">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    <input
+                        type="text"
+                        id="search-input"
+                        class="form-control form-control-lg"
+                        placeholder="Search destinations or packages..."
+                        value="{{ filters.search ?? '' }}"
+                    >
+                    <button class="btn btn-teal px-4" type="button">Search</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{# ── Main content ── #}
+<section class="py-5">
+    <div class="container">
+        <div class="row g-4">
+
+            {# ── Sidebar filters ── #}
+            <div class="col-lg-3">
+                <div class="filter-card">
+                    <h6 class="filter-title">Filter Packages</h6>
+
+                    <form method="GET" action="{{ base_path }}/packages" id="filter-form">
+
+                        <div class="mb-3">
+                            <label class="filter-label">Country</label>
+                            <select name="country" class="form-select form-select-sm" onchange="this.form.submit()">
+                                <option value="">All Countries</option>
+                                {% for destination in countries %}
+                                    <option value="{{ destination.country }}"
+                                        {{ (filters.country ?? '') == destination.country ? 'selected' : '' }}>
+                                        {{ destination.country }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="filter-label">Max Duration</label>
+                            <select name="days" class="form-select form-select-sm" onchange="this.form.submit()">
+                                <option value="">Any Duration</option>
+                                <option value="4" {{ (filters.days ?? '') == '4' ? 'selected' : '' }}>Up to 4 days</option>
+                                <option value="6" {{ (filters.days ?? '') == '6' ? 'selected' : '' }}>Up to 6 days</option>
+                                <option value="8" {{ (filters.days ?? '') == '8' ? 'selected' : '' }}>Up to 8 days</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="filter-label">Max Budget</label>
+                            <select name="budget" class="form-select form-select-sm" onchange="this.form.submit()">
+                                <option value="">Any Budget</option>
+                                <option value="1000" {{ (filters.budget ?? '') == '1000' ? 'selected' : '' }}>Under $1,000</option>
+                                <option value="1300" {{ (filters.budget ?? '') == '1300' ? 'selected' : '' }}>Under $1,300</option>
+                                <option value="1600" {{ (filters.budget ?? '') == '1600' ? 'selected' : '' }}>Under $1,600</option>
+                                <option value="2000" {{ (filters.budget ?? '') == '2000' ? 'selected' : '' }}>Under $2,000</option>
+                            </select>
+                        </div>
+
+                        {% if filters.country is defined and filters.country != ''
+                            or filters.days is defined and filters.days != ''
+                            or filters.budget is defined and filters.budget != '' %}
+                            <a href="{{ base_path }}/packages" class="btn btn-outline-secondary btn-sm w-100">Clear Filters</a>
+                        {% endif %}
+
+                    </form>
+                </div>
+            </div>
+
+            {# ── Packages grid ── #}
+            <div class="col-lg-9">
+
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <p class="text-muted small mb-0">{{ packages|length }} package{{ packages|length != 1 ? 's' : '' }} found</p>
+                </div>
+
+                <div class="row g-4" id="packages-grid">
+                    {% for package in packages %}
+                        <div class="col-md-6 col-xl-4">
+                            <div class="card package-card h-100">
+                                <img
+                                    src="{{ package.image_url ?? 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800' }}"
+                                    class="card-img-top package-card-img"
+                                    alt="{{ package.title }}"
+                                    loading="lazy"
+                                >
+                                <div class="card-body d-flex flex-column">
+                                    <p class="package-destination">{{ package.city }}</p>
+                                    <h5 class="card-title package-title">{{ package.title }}</h5>
+                                    <p class="card-text text-muted small flex-grow-1">{{ package.description }}</p>
+                                    <div class="d-flex gap-3 my-2">
+                                        <span class="small text-muted">{{ package.duration_days }} days</span>
+                                        <span class="small text-muted">{{ package.available_slots }} slots left</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center pt-2 border-top">
+                                        <div>
+                                            <div class="price-label">From</div>
+                                            <div class="price-value">${{ package.price }}<span class="price-per">/person</span></div>
+                                        </div>
+                                        <a href="{{ base_path }}/packages/{{ package.id }}" class="btn btn-teal btn-sm">View Deal</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="col-12">
+                            <div class="text-center py-5 text-muted">
+                                <p class="fs-5 mb-2">No packages found.</p>
+                                <a href="{{ base_path }}/packages" class="btn btn-outline-secondary btn-sm">Clear Filters</a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{# load the packages JS file only on this page #}
+{% block scripts %}
+<script src="{{ base_path }}/assets/js/packages.js"></script>
+{% endblock %}

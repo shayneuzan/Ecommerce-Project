@@ -34,6 +34,8 @@ CREATE TABLE IF NOT EXISTS package (
     description TEXT,
     duration_days INT NOT NULL,
     price DECIMAL(10,2) NOT NULL,
+    price_child DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    min_age INT NOT NULL DEFAULT 0,
     available_slots INT NOT NULL DEFAULT 10,
     image_url VARCHAR(500),
     FOREIGN KEY (destination_id) REFERENCES destination(id) ON DELETE CASCADE,
