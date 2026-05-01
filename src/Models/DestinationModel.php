@@ -20,9 +20,10 @@ class DestinationModel {
     public function create(array $data): int
     {
         $destination = R::dispense('destination');
-        $destination->city = $data['city'];
-        $destination->country = $data['country'];
-        $destination->description = $data['description'];
+        // Use null coalescing to prevent "Undefined array key" errors
+        $destination->city = $data['city'] ?? '';
+        $destination->country = $data['country'] ?? '';
+        $destination->description = $data['description'] ?? '';
         return R::store($destination);
     }
 
@@ -31,9 +32,9 @@ class DestinationModel {
         $SelectedDestination = R::load('destination', $id);
         if (!$SelectedDestination->id) return false;
 
-        $SelectedDestination->city = $data['city'];
-        $SelectedDestination->country = $data['country'];
-        $SelectedDestination->description = $data['description'];
+        $SelectedDestination->city = $data['city'] ?? $SelectedDestination->city;
+        $SelectedDestination->country = $data['country'] ?? $SelectedDestination->country;
+        $SelectedDestination->description = $data['description'] ?? $SelectedDestination->description;
 
         R::store($SelectedDestination);
         return true;

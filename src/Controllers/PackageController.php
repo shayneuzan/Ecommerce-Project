@@ -19,18 +19,14 @@ use Twig\Environment;
 
 class PackageController
 {
-    private HotelModel $hotelModel;
-    private GuideModel $guideModel;
-    private DestinationModel $destinationModel;
-
     public function __construct(
         private Environment $twig,
         private PackageModel $model,
         private string $basePath,
+        private HotelModel $hotelModel,
+        private GuideModel $guideModel,
+        private DestinationModel $destinationModel,
     ) {
-        $this->hotelModel = new HotelModel();
-        $this->guideModel = new GuideModel();
-        $this->destinationModel = new DestinationModel();
     }
 
     //GET /packages — show all packages with search and filter support
@@ -119,7 +115,7 @@ class PackageController
         $id = (int) $args['id'];
         $package = $this->model->findById($id);
         
-        if (!$package || !$package->id) {
+        if (!$package) { // Simplified check as findById now returns null if not found
             return $response->withHeader('Location', $this->basePath . '/admin')->withStatus(302);
         }
         

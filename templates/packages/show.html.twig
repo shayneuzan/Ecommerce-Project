@@ -28,7 +28,9 @@
             {# ── Package image and details ── #}
             <div class="col-lg-8">
                 <img
-                    src="{{ package.image_url ?? 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800' }}"
+                    {# src="{{ package.image_url ?? 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800' }}" #}
+                    src="{{ package.image_url|default('https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800') }}"
+                    onerror="this.src='{{ base_path ~ '/assets/images/no-image.jpg' }}'"
                     alt="{{ package.title }}"
                     class="img-fluid rounded-3 mb-4 w-100 package-detail-img"
                 >

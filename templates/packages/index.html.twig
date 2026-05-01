@@ -100,7 +100,8 @@
                         <div class="col-md-6 col-xl-4">
                             <div class="card package-card h-100">
                                 <img
-                                    src="{{ package.image_url ?? 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800' }}"
+                                    {# src="{{ package.image_url ?? 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800' }}" #}
+                                    src="{{ package.image_url|default('https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800') }}"
                                     onerror="this.src='{{ base_path ~ '/assets/images/no-image.jpg' }}'"
                                     class="card-img-top package-card-img"
                                     alt="{{ package.title }}"

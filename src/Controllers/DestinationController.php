@@ -84,11 +84,11 @@ class DestinationController
         
         return $response->withHeader('Location', $this->basePath . '/admin')->withStatus(302);
     } 
-    public function delete(Request $request, Response $response, array $args): Response
+    public function destroy(Request $request, Response $response, array $args): Response
     {
         $id = (int) $args['id'];
         $this->model->delete($id);
         
-        return $response->withHeader('', $this->basePath . '')->withStatus(0);
+        return $response->withHeader('Location', $this->basePath . '/admin')->withStatus(302);
     }
 }

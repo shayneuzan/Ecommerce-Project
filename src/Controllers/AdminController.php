@@ -37,13 +37,8 @@ class AdminController {
             $user->last_name = 'Anonymous';
         }
 
-        $total_earnings = 0;
-        foreach ($bookings as $booking) {
-            $package = R::load('package', $booking->package_id);
-            if ($package->id) {
-                $total_earnings += $package->price;
-            }
-        }
+        // Optimized: Calculate sum directly in the database to avoid N+1 query performance issues
+        $total_earnings = (float) R::getCell('SELECT SUM(package.price) FROM booking JOIN package ON booking.package_id = package.id');
 
         $html = $this->twig->render('admin/index.html.twig', [
             'basePath' => $this->basePath,

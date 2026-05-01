@@ -47,10 +47,13 @@ $container = new \DI\Container();
 $container->set(Environment::class, $twig);
 
 //register the package controller with its dependencies
-$container->set(PackageController::class, fn() => new PackageController(
+$container->set(PackageController::class, fn(\DI\Container $c) => new PackageController(
     $twig,
     new PackageModel(),
-    $basePath
+    $basePath,
+    new HotelModel(),
+    new GuideModel(),
+    new DestinationModel()
 ));
 
 //register the admin controller with its dependencies
@@ -164,7 +167,7 @@ $app->post('/admin/guides/{id}/delete', [GuideController::class, 'destroy']);
 $app->get('/api/packages/search', function ($request, $response) {
     $params   = $request->getQueryParams();
     $query    = trim($params['q'] ?? '');
-    $model    = new \App\Models\PackageModel();
+    $model    = new PackageModel();
     $packages = $query ? $model->search($query) : $model->findAll();
 
     $payload = array_map(fn($p) => [

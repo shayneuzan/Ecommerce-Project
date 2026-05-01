@@ -39,7 +39,7 @@ class PackageModel
         $package->guide_language = $guide->language;
         $package->guide_price = $guide->price;
         // $package->price_child = $package->price_child;
-        // $package->min_age = $package->min_age;
+        // $package->min_age = $package->min_age; // "Assignment made to same variable; did you mean to assign to $package->min_age?"
 
         return $package;
     }
