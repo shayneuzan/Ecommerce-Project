@@ -22,25 +22,29 @@
                             <select id="destination_id" name="destination_id" class="form-select" required>
                                 <option value="">Select destination</option>
                                 {% for destination in destinations %}
-                                    <option value="{{ destination.id }}" {{ destination.id == package.destination_id ? 'selected' : '' }}>{{ destination.city }}, {{ destination.country }}</option>
+                                    <option value="{{ destination.id }}">{{ destination.city }}, {{ destination.country }}</option>
                                 {% endfor %}
                             </select>
                         </div>
                         <div class="col-md-4">
                             <label for="hotel_id" class="form-label">Hotel</label>
-                            <select id="hotel_id" name="hotel_id" class="form-select" required>
-                                <option value="">Select hotel</option>
+                            <select id="hotel_id" name="hotel_id" class="form-select" required disabled>
+                                <option value="">Select destination first</option>
                                 {% for hotel in hotels %}
-                                    <option value="{{ hotel.id }}" {{ hotel.id == package.hotel_id ? 'selected' : '' }}>{{ hotel.hotel_name }}</option>
+                                    <option value="{{ hotel.id }}" data-destination="{{ hotel.destination_id }}">
+                                        {{ hotel.hotel_name }}
+                                    </option>
                                 {% endfor %}
                             </select>
                         </div>
                         <div class="col-md-4">
                             <label for="guide_id" class="form-label">Guide</label>
-                            <select id="guide_id" name="guide_id" class="form-select" required>
-                                <option value="">Select guide</option>
+                            <select id="guide_id" name="guide_id" class="form-select" required disabled>
+                                <option value="">Select destination first</option>
                                 {% for guide in guides %}
-                                    <option value="{{ guide.id }}" {{ guide.id == package.guide_id ? 'selected' : '' }}>{{ guide.guide_name }} - {{ guide.language }}</option>
+                                    <option value="{{ guide.id }}" data-destination="{{ guide.destination_id }}">
+                                        {{ guide.guide_name }} - {{ guide.language }}
+                                    </option>
                                 {% endfor %}
                             </select>
                         </div>
@@ -90,5 +94,9 @@
                 </form>
             </div>
         </div>
-    </div>
+    </div>  
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ basePath }}/assets/js/adminPackages.js"></script>
 {% endblock %}

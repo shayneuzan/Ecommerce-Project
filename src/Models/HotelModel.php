@@ -23,6 +23,7 @@ class HotelModel {
         $hotel->hotel_name = $data['hotel_name'] ?? '';
         $hotel->address = $data['address'] ?? '';
         $hotel->rating = isset($data['rating']) ? (float) $data['rating'] : 0.0;
+        $hotel->destination_id = isset($data['destination_id']) ? (int) $data['destination_id'] : null;
         return R::store($hotel);
     }
 

@@ -65,3 +65,9 @@ footer {
     max-height: 520px;
     min-height: 520px;
 }
+
+.truncate-cell {
+    max-width: 200px;
+    flex-wrap: nowrap;
+    overflow: hidden;
+}

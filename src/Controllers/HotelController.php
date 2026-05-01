@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
+use App\Models\DestinationModel;
 use App\Models\HotelModel;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -14,32 +15,22 @@ class HotelController
     private Environment $twig;
     private HotelModel $model;
     private string $basePath;
+    private DestinationModel $destinationModel;
 
     public function __construct(Environment $twig, HotelModel $model , string $basePath)
     {
         $this->twig = $twig;
         $this->model = $model;
         $this->basePath = $basePath;
-    }
-
-    public function index(Request $request, Response $response): Response
-    {
-        $hotels = $this->model->findAll();
-        
-        $html = $this->twig->render('admin/hotels/index.html.twig', [
-            'basePath' => $this->basePath,
-            'hotels' => $hotels,
-            'app_lang' => $_SESSION['lang'] ?? 'en'
-        ]);
-        
-        $response->getBody()->write($html);
-        return $response;
+        $this->destinationModel = new DestinationModel();
     }
 
     public function create(Request $request, Response $response): Response
     {
+        $destinations = $this->destinationModel->findAll();
         $html = $this->twig->render('admin/hotels/create.html.twig', [
             'basePath' => $this->basePath,
+            'destinations' => $destinations,
             'app_lang' => $_SESSION['lang'] ?? 'en'
         ]);
         
@@ -60,6 +51,7 @@ class HotelController
     {
         $id = (int) $args['id'];
         $hotel = $this->model->findById($id);
+        $destinations = $this->destinationModel->findAll();
         
         if (!$hotel || !$hotel->id) {
             return $response->withHeader('Location', $this->basePath . '/admin')->withStatus(302);
@@ -68,7 +60,8 @@ class HotelController
         $html = $this->twig->render('admin/hotels/edit.html.twig', [
             'basePath' => $this->basePath,
             'hotel' => $hotel,
-            'app_lang' => $_SESSION['lang'] ?? 'en'
+            'destinations' => $destinations,
+            'app_lang' => $_SESSION['lang'] ?? 'en',
         ]);
         
         $response->getBody()->write($html);

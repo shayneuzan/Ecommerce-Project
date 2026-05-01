@@ -26,6 +26,7 @@ class AdminController {
         $packages = R::findAll('package');
         $bookings = R::findAll('booking');
         $guides = R::findAll('guide');
+        $hotels = R::findAll('hotel');
         $destinations = R::findAll('destination');
         $user = R::findOne('user', 'id = ?', [$_SESSION['user_id'] ?? 0]);
 
@@ -50,9 +51,10 @@ class AdminController {
             'bookings' => $bookings,
             'guides' => $guides,
             'destinations' => $destinations,
-            'app_lang' => $_SESSION['lang'] ?? 'en',
+            'hotels' => $hotels,
             'total_earnings' => $total_earnings,
             'user' => $user,
+            'app_lang' => $_SESSION['lang'] ?? 'en',
         ]);
         
         $response->getBody()->write($html);

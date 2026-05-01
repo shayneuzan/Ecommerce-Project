@@ -1,229 +1,342 @@
-{% extends "admin/dashboard.html.twig" %}
+    {% extends "admin/dashboard.html.twig" %}
 
-{% block title %}Admin Dashboard - Traventa{% endblock %}
+    {% block title %}Admin Dashboard - Traventa{% endblock %}
 
-{% block content %}
+    {% block content %}
 
-    {#  ── Welcome Admin Title ── #}
-    <div class="container mt-5">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="section-title">Welcome {{ user.first_name|capitalize }} {{ user.last_name|capitalize }}! 👋</h2>
-        </div>
-    </div>
-
-    {# ── Statistics Overview ── #}
-    <div class="container">
-        <div class="row g-3 mb-4">
-            <div class="col-lg-4 col-md-6">
-                <div class="card shadow-sm border-0 rounded-4">
-                    <div class="card-body">
-                        <h6 class="text-muted mb-1">Total Bookings</h6>
-                        <h3 class="text-success mb-0">{{ bookings.total|number_format(0) }}</h3>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6">
-                <div class="card shadow-sm border-0 rounded-4">
-                    <div class="card-body">
-                        <h6 class="text-muted mb-1">Total Packages</h6>
-                        <h3 class="text-primary mb-0">{{ packages|length }}</h3>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-12">
-                <div class="card shadow-sm border-0 rounded-4">
-                    <div class="card-body">
-                        <h6 class="text-muted mb-1">Total Revenue</h6>
-                        <h3 class="text-success mb-0">${{ (total_earnings|default(0))|number_format(2) }}</h3>
-                    </div>
-                </div>
+        {#  ── Welcome Admin Title ── #}
+        <div class="container mt-5">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="section-title">Welcome {{ user.first_name|capitalize }} {{ user.last_name|capitalize }}! 👋</h2>
             </div>
         </div>
-    </div>
 
-    <div class="container mb-5">
-        {# ── Modern Pill Navigation (from Bootstrap) ── #}
-        <ul class="nav nav-pills nav-fill gap-2 p-1 small rounded-5 shadow-sm mb-4 admin-pill-nav" id="adminPillNav" role="tablist">
-            <li class="nav-item" role="presentation">
-                <button class="nav-link active rounded-5" id="pkg-pill" data-bs-toggle="tab" data-bs-target="#tab-packages" type="button" role="tab">Packages</button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link rounded-5" id="book-pill" data-bs-toggle="tab" data-bs-target="#tab-bookings" type="button" role="tab">Bookings</button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link rounded-5" id="dest-pill" data-bs-toggle="tab" data-bs-target="#tab-destinations" type="button" role="tab">Destinations</button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link rounded-5" id="guide-pill" data-bs-toggle="tab" data-bs-target="#tab-guides" type="button" role="tab">Guides</button>
-            </li>
-        </ul>
+        {# ── Statistics Overview ── #}
+        <div class="container">
+            <div class="row g-3 mb-4">
+                <div class="col-lg-4 col-md-6">
+                    <div class="card shadow-sm border-0 rounded-4">
+                        <div class="card-body">
+                            <h6 class="text-muted mb-1">Total Bookings</h6>
+                            <h3 class="text-success mb-0">{{ bookings.total|number_format(0) }}</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="card shadow-sm border-0 rounded-4">
+                        <div class="card-body">
+                            <h6 class="text-muted mb-1">Total Packages</h6>
+                            <h3 class="text-primary mb-0">{{ packages|length }}</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-12">
+                    <div class="card shadow-sm border-0 rounded-4">
+                        <div class="card-body">
+                            <h6 class="text-muted mb-1">Total Revenue</h6>
+                            <h3 class="text-success mb-0">${{ (total_earnings|default(0))|number_format(2) }}</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-        {# ── Main Content Card ── #}
-        <div class="card shadow-sm border-0 rounded-4">
-            <div class="card-body p-4">
-                <div class="tab-content" id="adminPillContent">
-                    
-                    {# ── Tab 1: Packages ── #}
+        <div class="container mb-5">
+            {# ── Modern Pill Navigation (from Bootstrap) ── #}
+            <ul class="nav nav-pills nav-fill gap-2 p-1 small rounded-5 shadow-sm mb-4 admin-pill-nav" id="adminPillNav" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active rounded-5" id="pkg-pill" data-bs-toggle="tab" data-bs-target="#tab-packages" type="button" role="tab">Packages</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link rounded-5" id="book-pill" data-bs-toggle="tab" data-bs-target="#tab-bookings" type="button" role="tab">Bookings</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link rounded-5" id="dest-pill" data-bs-toggle="tab" data-bs-target="#tab-destinations" type="button" role="tab">Destinations</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link rounded-5" id="guide-pill" data-bs-toggle="tab" data-bs-target="#tab-guides" type="button" role="tab">Guides</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link rounded-5" id="guide-pill" data-bs-toggle="tab" data-bs-target="#tab-hotels" type="button" role="tab">Hotels</button>
+                </li>
+            </ul>
+
+            {# ── Main Content Card ── #}
+            <div class="card shadow-sm border-0 rounded-4">
+                <div class="card-body p-4">
+                    <div class="tab-content" id="adminPillContent">
+                        
+                        {# ── Tab 1: Packages ── #}
                     <div class="tab-pane fade show active" id="tab-packages" role="tabpanel">
                         <div class="d-flex justify-content-between align-items-center mb-4">
                             <h4 class="fw-bold mb-0">Manage Packages</h4>
                             <a href="{{ basePath }}/admin/packages/create" class="btn btn-primary rounded-pill btn-sm px-3">+ New Package</a>
                         </div>
                         <div class="table-responsive">
-                    <table class="table align-middle">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Package Title</th>
-                                <th>Duration Day(s)</th>
-                                <th>Image</th>
-                                <th>Price</th>
-                                <th>Slots</th>
-                                <th>Child Price</th>
-                                <th>Minimum Age</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for package in packages %}
-                            <tr>
-                                <td class="fw-bold">{{ package.title }}</td>
-                                <td>{{ package.duration_days }}</td>
-                                <td>
-                                    <img src="{{ package.image_url|default(basePath ~ '/assets/images/no-image.jpg') }}"
-                                    onerror="this.src='{{ basePath ~ '/assets/images/no-image.jpg' }}'"
-                                    alt="Image N/A" class="img-thumbnail" style="width:160px; height:100px; object-fit:cover;">
-                                </td>
-                                <td>${{ package.price|number_format(2) }}</td>
-                                <td>{{ package.available_slots }}</td>
-                                <td>${{ package.price_child|number_format(2) }}</td>
-                                <td>{{ package.min_age }}</td>
-                                <td>
-                                    <a href="{{ basePath }}/admin/packages/{{ package.id }}/edit" class="btn btn-sm btn-outline-primary me-2">Edit</a>
-                                    <form action="{{ basePath }}/admin/packages/{{ package.id }}/delete" method="POST" class="d-inline">
-                                        <button type="submit" onclick="return confirm('Are you sure?')" class="btn btn-sm btn-outline-danger">Delete</button>
-                                    </form>
-                                </td>
-                            </tr>
-                            {% else %}
-                            <tr>
-                                <td colspan="6" class="text-center py-5">
-                                    <p class="fs-5">No packages available yet.</p>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                        </div>
-                    </div>
-
-                    {# ── Tab 2: Bookings ── #}
-                    <div class="tab-pane fade" id="tab-bookings" role="tabpanel">
-                        <h4 class="fw-bold mb-4">View Booking Logs</h4>
-                        <div class="table-responsive">
-                            <table class="table align-middle">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>User ID</th>
-                                        <th>Package ID</th>
-                                        <th>Date</th>
-                                        <th>Total</th>
-                                        <th>Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for booking in bookings.list %}
-                                    <tr>
-                                        <td class="fw-bold">{{ booking.user_id }}</td>
-                                        <td>{{ booking.package_id }}</td>
-                                        <td>{{ booking.booking_date|date('Y-m-d') }}</td>
-                                        <td>${{ booking.total_price|number_format(2) }}</td>
-                                        <td><span class="badge rounded-pill bg-primary">{{ booking.status }}</span></td>
-                                    </tr>
-                                    {% else %}
-                                    <tr>
-                                        <td colspan="5" class="text-center py-5 text-muted">
-                                            <i class="bi bi-inbox fs-1 d-block mb-2"></i>
-                                            No booking records found.
-                                        </td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    {# ── Tab 3: Destinations ── #}
-                    <div class="tab-pane fade" id="tab-destinations" role="tabpanel">
-                        <div class="d-flex justify-content-between align-items-center mb-4">
-                            <h4 class="fw-bold mb-0">Manage Destinations</h4>
-                            <a href="{{ basePath }}/admin/destinations/create" class="btn btn-primary rounded-pill btn-sm px-3">+ New Destination</a>
-                        </div>
-                        <div class="table-responsive">
-                            <table class="table align-middle">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>City</th>
-                                        <th>Country</th>
-                                        <th>Description</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
+                        <table class="table align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Image</th>
+                                    <th>Package Title</th>
+                                    <th>Destination</th>
+                                    <th>Duration</th>
+                                    <th>Price</th>
+                                    <th>Child Price</th>
+                                    <th>Available Slots</th>
+                                    <th>Minimum Age</th>
+                                    <th>Guide</th>
+                                    <th>Description</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for package in packages %}
+                                <tr>
+                                    <td style="width:140px;">
+                                        <div style="display:flex; align-items:center;">
+                                            <img src="{{ package.image_url|default(basePath ~ '/assets/images/no-image.jpg') }}"
+                                                onerror="this.src='{{ basePath ~ '/assets/images/no-image.jpg' }}'"
+                                                alt="{{ package.title }}"
+                                                class="rounded"
+                                                style="width:120px; height:90px; object-fit:cover;">
+                                        </div>
+                                    </td>
+                                    <td class="fw-bold">{{ package.title }}</td>
+                                    <td>
                                     {% for destination in destinations %}
-                                    <tr>
-                                        <td class="fw-bold">{{ destination.city }}</td>
-                                        <td>{{ destination.country }}</td>
-                                        <td class="text-truncate" style="max-width: 200px;">{{ destination.description }}</td>
-                                        <td>
-                                            <a href="{{ basePath }}/admin/destinations/{{ destination.id }}/edit" class="btn btn-sm btn-outline-primary rounded-pill">Edit</a>
-                                            <form action="{{ basePath }}/admin/destinations/{{ destination.id }}/delete" method="POST" class="d-inline">
-                                                <button type="submit" onclick="return confirm('Are you sure?')" class="btn btn-sm btn-outline-danger rounded-pill">Delete</button>
-                                            </form>
-                                        </td>
-                                    </tr>
+                                        {% if destination.id == package.destination_id %}
+                                            {{ destination.city }}, {{ destination.country }}
+                                        {% elseif destination.id == null %}
+                                            Unassigned Destination
+                                        {% endif %}
                                     {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    {# ── Tab 4: Guides ── #}
-                    <div class="tab-pane fade" id="tab-guides" role="tabpanel">
-                        <div class="d-flex justify-content-between align-items-center mb-4">
-                            <h4 class="fw-bold mb-0">Manage Guides</h4>
-                            <a href="{{ basePath }}/admin/guides/create" class="btn btn-primary rounded-pill btn-sm px-3">+ New Guide</a>
-                        </div>
-                        <div class="table-responsive">
-                            <table class="table align-middle">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>Guide Name</th>
-                                        <th>Language</th>
-                                        <th>Price</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
+                                    </td>
+                                    <td>{{ package.duration_days }}</td>
+                                    <td>${{ package.price|number_format(2) }}</td>
+                                    <td>${{ package.price_child|number_format(2) }}</td>
+                                    <td>{{ package.available_slots }}</td>
+                                    <td>{{ package.min_age }}</td>
+                                    <td>
                                     {% for guide in guides %}
-                                    <tr>
-                                        <td class="fw-bold">{{ guide.guide_name }}</td>
-                                        <td>{{ guide.language }}</td>
-                                        <td>${{ guide.price|number_format(2) }}</td>
-                                        <td>
-                                            <a href="{{ basePath }}/admin/guides/{{ guide.id }}/edit" class="btn btn-sm btn-outline-primary rounded-pill">Edit</a>
-                                            <form action="{{ basePath }}/admin/guides/{{ guide.id }}/delete" method="POST" class="d-inline">
-                                                <button type="submit" onclick="return confirm('Are you sure?')" class="btn btn-sm btn-outline-danger rounded-pill">Delete</button>
-                                            </form>
-                                        </td>
-                                    </tr>
+                                        {% if guide.id == package.guide_id %}
+                                            {{ guide.guide_name }} - {{ guide.language }}
+                                        {% elseif guide.id == null %}
+                                            Unassigned Guide
+                                        {% endif %}
                                     {% endfor %}
-                                </tbody>
-                            </table>
+                                    </td>
+                                    <td>{{ package.description }}</td>
+                                    <td>
+                                        <a href="{{ basePath }}/admin/packages/{{ package.id }}/edit" class="btn btn-sm btn-outline-primary me-2">Edit</a>
+                                        <form action="{{ basePath }}/admin/packages/{{ package.id }}/delete" method="POST" class="d-inline">
+                                            <button type="submit" onclick="return confirm('Are you sure?')" class="btn btn-sm btn-outline-danger">Delete</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                {% else %}
+                                <tr>
+                                    <td colspan="6" class="text-center py-5">
+                                        <p class="fs-5">No packages available yet.</p>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
                         </div>
                     </div>
 
+                        {# ── Tab 2: Bookings ── #}
+                        <div class="tab-pane fade" id="tab-bookings" role="tabpanel">
+                            <h4 class="fw-bold mb-4">View Booking Logs</h4>
+                            <div class="table-responsive">
+                                <table class="table align-middle">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>User ID</th>
+                                            <th>Package ID</th>
+                                            <th>Date</th>
+                                            <th>Total</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for booking in bookings.list %}
+                                        <tr>
+                                            <td class="fw-bold">{{ booking.user_id }}</td>
+                                            <td>{{ booking.package_id }}</td>
+                                            <td>{{ booking.booking_date|date('Y-m-d') }}</td>
+                                            <td>${{ booking.total_price|number_format(2) }}</td>
+                                            <td><span class="badge rounded-pill bg-primary">{{ booking.status }}</span></td>
+                                        </tr>
+                                        {% else %}
+                                        <tr>
+                                            <td colspan="5" class="text-center py-5 text-muted">
+                                                <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                                                No booking records found.
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        {# ── Tab 3: Destinations ── #}
+                        <div class="tab-pane fade" id="tab-destinations" role="tabpanel">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h4 class="fw-bold mb-0">Manage Destinations</h4>
+                                <a href="{{ basePath }}/admin/destinations/create" class="btn btn-primary rounded-pill btn-sm px-3">+ New Destination</a>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table align-middle">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>City</th>
+                                            <th>Country</th>
+                                            <th>Description</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for destination in destinations %}
+                                        <tr>
+                                            <td class="fw-bold">{{ destination.city }}</td>
+                                            <td>{{ destination.country }}</td>
+                                            <td>
+                                                <div class="truncate-cell" title="{{ destination.description }}">
+                                                    {{ destination.description }}
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <a href="{{ basePath }}/admin/destinations/{{ destination.id }}/edit"
+                                                class="btn btn-sm btn-outline-primary rounded-pill">Edit</a>
+                                                <form action="{{ basePath }}/admin/destinations/{{ destination.id }}/delete"
+                                                    method="POST" class="d-inline">
+                                                    <button type="submit"
+                                                            onclick="return confirm('Are you sure?')"
+                                                            class="btn btn-sm btn-outline-danger rounded-pill">
+                                                        Delete
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        {% else %}
+                                        <tr>
+                                            <td colspan="5" class="text-center py-5 text-muted">
+                                                <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                                                No Destinations found. Create one <a href="{{ basePath }}/admin/destinations/create">here</a>.
+                                            </td>
+                                        </tr>                                              
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        {# ── Tab 4: Guides ── #}
+                        <div class="tab-pane fade" id="tab-guides" role="tabpanel">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h4 class="fw-bold mb-0">Manage Guides</h4>
+                                <a href="{{ basePath }}/admin/guides/create" class="btn btn-primary rounded-pill btn-sm px-3">+ New Guide</a>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table align-middle">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Guide Name</th>
+                                            <th>Language</th>
+                                            <th>Price</th>
+                                            <th>Destination</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for guide in guides %}
+                                        <tr>
+                                            <td class="fw-bold">{{ guide.guide_name }}</td>
+                                            <td>{{ guide.language }}</td>
+                                            <td>${{ guide.price|number_format(2) }}
+                                            </td>
+                                            <td>
+                                            {% for destination in destinations %}
+                                                {% if destination.id == guide.destination_id %}
+                                                    {{ destination.city }}, {{ destination.country }}
+                                                {% elseif destination.id == null %}
+                                                    Unassigned Destination
+                                                {% endif %}
+                                            {% endfor %}
+                                            </td>
+                                            <td>
+                                                <a href="{{ basePath }}/admin/guides/{{ guide.id }}/edit" class="btn btn-sm btn-outline-primary rounded-pill">Edit</a>
+                                                <form action="{{ basePath }}/admin/guides/{{ guide.id }}/delete" method="POST" class="d-inline">
+                                                    <button type="submit" onclick="return confirm('Are you sure?')" class="btn btn-sm btn-outline-danger rounded-pill">Delete</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        {% else %}
+                                        <tr>
+                                            <td colspan="5" class="text-center py-5 text-muted">
+                                                <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                                                No Guides found. Create one <a href="{{ basePath }}/admin/guides/create">here</a>.
+                                            </td>
+                                        </tr>                                        
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        {# ── Tab 5: Hotels ── #}
+                        <div class="tab-pane fade" id="tab-hotels" role="tabpanel">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h4 class="fw-bold mb-0">Manage Hotels</h4>
+                                <a href="{{ basePath }}/admin/hotels/create" class="btn btn-primary rounded-pill btn-sm px-3">+ New Hotel</a>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table align-middle">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Hotel Name</th>
+                                            <th>Destination</th>
+                                            <th>Rating</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for hotel in hotels %}
+                                        <tr>
+                                            <td class="fw-bold">{{ hotel.hotel_name }}</td>
+                                            <td>
+                                            {% for destination in destinations %}
+                                                {% if destination.id == hotel.destination_id %}
+                                                    {{ destination.city }}, {{ destination.country }}
+                                                {% elseif destination.id == null %}
+                                                    Unassigned Destination
+                                                {% endif %}
+                                            {% endfor %}
+                                            </td>
+                                            <td>{{ hotel.rating }}/5</td>
+                                            <td>
+                                                <a href="{{ basePath }}/admin/hotels/{{ hotel.id }}/edit" class="btn btn-sm btn-outline-primary rounded-pill">Edit</a>
+                                                <form action="{{ basePath }}/admin/hotels/{{ hotel.id }}/delete" method="POST" class="d-inline">
+                                                    <button type="submit" onclick="return confirm('Are you sure?')" class="btn btn-sm btn-outline-danger rounded-pill">Delete</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        {% else %}
+                                        <tr>
+                                            <td colspan="5" class="text-center py-5 text-muted">
+                                                <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                                                No Hotels found. Create one <a href="{{ basePath }}/admin/hotels/create">here</a>.
+                                            </td>
+                                        </tr>                                              
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-{% endblock %}
+    {% endblock %}

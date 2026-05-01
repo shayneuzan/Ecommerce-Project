@@ -20,7 +20,8 @@ class GuideModel {
     public function create(array $data): int
     {
         $guide = R::dispense('guide');
-        $guide->title = $data['title'] ?? '';
+        $guide->destination_id = $data['destination_id'] ?? 0;
+        $guide->guide_name = $data['guide_name'] ?? '';
         $guide->language = $data['language'] ?? '';
         $guide->price = isset($data['price']) ? (float) $data['price'] : 0.0;
         return R::store($guide);
@@ -28,23 +29,24 @@ class GuideModel {
 
     public function update(int $id, array $data): bool
     {
-        $SelectedGuide = R::load('guide', $id);
-        if (!$SelectedGuide->id) return false;
+        $selectedGuide = R::load('guide', $id);
+        if (!$selectedGuide->id) return false;
 
-        $SelectedGuide->title = $data['title'] ?? $SelectedGuide->title;
-        $SelectedGuide->language = $data['language'] ?? $SelectedGuide->language;
-        $SelectedGuide->price = isset($data['price']) ? (float) $data['price'] : $SelectedGuide->price;
+        $selectedGuide->destination_id = $data['destination_id'] ?? $selectedGuide->destination_id;
+        $selectedGuide->guide_name = $data['guide_name'] ?? $selectedGuide->guide_name;
+        $selectedGuide->language = $data['language'] ?? $selectedGuide->language;
+        $selectedGuide->price = isset($data['price']) ? (float) $data['price'] : $selectedGuide->price;
 
-        R::store($SelectedGuide);
+        R::store($selectedGuide);
         return true;
     }
 
     public function delete(int $id): bool
     {
-        $SelectedGuide = R::load('guide', $id);
-        if (!$SelectedGuide->id) return false;
+        $selectedGuide = R::load('guide', $id);
+        if (!$selectedGuide->id) return false;
 
-        R::trash($SelectedGuide);
+        R::trash($selectedGuide);
         return true;
     }
 }

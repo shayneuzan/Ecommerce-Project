@@ -15,7 +15,7 @@
                     <div class="row gy-3">
                         <div class="col-md-4">
                             <label for="title" class="form-label">Guide Name</label>
-                            <input type="text" id="title" name="title" class="form-control" value="{{ guide.title|default('') }}" required>
+                            <input type="text" id="guide_name" name="guide_name" class="form-control" value="{{ guide.guide_name|default('') }}" required>
                         </div>
                         <div class="col-md-4">
                             <label for="language" class="form-label">Language</label>
@@ -24,6 +24,15 @@
                         <div class="col-md-4">
                             <label for="price" class="form-label">Price</label>
                             <input type="number" id="price" name="price" class="form-control" step="0.01" min="0" value="{{ guide.price|default('') }}" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="destination_id" class="form-label">Destination</label>
+                            <select id="destination_id" name="destination_id" class="form-select" required>
+                                <option value="">Select destination</option>
+                                {% for destination in destinations %}   
+                                    <option value="{{ destination.id }}" {{ destination.id == guide.destination_id ? 'selected' : '' }}>{{ destination.city }}, {{ destination.country }}</option>
+                                {% endfor %}
+                            </select>
                         </div>
                     </div>
 
