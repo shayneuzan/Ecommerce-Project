@@ -1,0 +1,61 @@
+{% extends "admin/dashboard.html.twig" %}
+
+{% block title %}Edit Package - Admin Dashboard - Traventa{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="section-title">Edit Package</h2>
+            <p class="text-muted">Update package details and save your changes.</p>
+        </div>
+        <a href="{{ basePath }}/admin" class="btn btn-outline-navy">Back to Dashboard</a>
+    </div>
+
+    <div class="card shadow-sm border-0 rounded-4">
+        <div class="card-body">
+            <form action="{{ basePath }}/admin/packages/{{ package.id }}/update" method="post">
+                <div class="row gy-3">
+                    <div class="col-md-6">
+                        <label for="title" class="form-label">Package Title</label>
+                        <input type="text" id="title" name="title" class="form-control" value="{{ package.title }}" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="price" class="form-label">Price</label>
+                        <input type="number" id="price" name="price" class="form-control" step="0.01" min="0" value="{{ package.price }}" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="price_child" class="form-label">Child Price</label>
+                        <input type="number" id="price_child" name="price_child" class="form-control" step="0.01" min="0" value="{{ package.price_child }}">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="min_age" class="form-label">Minimum Age</label>
+                        <input type="number" id="min_age" name="min_age" class="form-control" min="0" value="{{ package.min_age }}">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="duration_days" class="form-label">Duration (days)</label>
+                        <input type="number" id="duration_days" name="duration_days" class="form-control" min="1" value="{{ package.duration_days }}" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="available_slots" class="form-label">Available Slots</label>
+                        <input type="number" id="available_slots" name="available_slots" class="form-control" min="0" value="{{ package.available_slots }}" required>
+                    </div>
+                    <div class="col-12">
+                        <label for="image_url" class="form-label">Image URL</label>
+                        <input type="url" id="image_url" name="image_url" class="form-control" value="{{ package.image_url }}">
+                    </div>
+                    <div class="col-12">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea id="description" name="description" rows="5" class="form-control">{{ package.description }}</textarea>
+                    </div>
+                </div>
+
+                <div class="mt-4 d-flex justify-content-end gap-2">
+                    <a href="{{ basePath }}/admin" class="btn btn-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-teal">Update Package</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

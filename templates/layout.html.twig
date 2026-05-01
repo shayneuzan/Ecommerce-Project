@@ -45,6 +45,12 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ base_path }}/packages">Packages</a>
                     </li>
+                    
+                    {# Admin section (Will be hidden for non-admin users/ For now, everyone is an admin) #}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ base_path }}/admin">Admin</a>
+                    </li>    
+                                    
                     {% if app_authenticated ?? false %}
                         <li class="nav-item">
                             <a class="nav-link" href="{{ base_path }}/bookings">My Bookings</a>

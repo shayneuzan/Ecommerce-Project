@@ -9,8 +9,15 @@ use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 use RedBeanPHP\R;
 use App\Database;
+use App\Controllers\DestinationController;
+use App\Controllers\GuideController;
+use App\Controllers\HotelController;
 use App\Controllers\PackageController;
+use App\Controllers\AdminController;
 use App\Models\PackageModel;
+use App\Models\DestinationModel;
+use App\Models\GuideModel;
+use App\Models\HotelModel;
 
 require __DIR__ . '/vendor/autoload.php';
 
@@ -43,6 +50,33 @@ $container->set(Environment::class, $twig);
 $container->set(PackageController::class, fn() => new PackageController(
     $twig,
     new PackageModel(),
+    $basePath
+));
+
+//register the admin controller with its dependencies
+$container->set(AdminController::class, fn() => new AdminController(
+    $twig,
+    $basePath
+));
+
+//register the destination controller with its dependencies
+$container->set(DestinationController::class, fn() => new DestinationController(
+    $twig,
+    new DestinationModel(),
+    $basePath
+));
+
+//register the guide controller with its dependencies
+$container->set(GuideController::class, fn() => new GuideController(
+    $twig,
+    new GuideModel(),
+    $basePath
+));
+
+//register the hotel controller with its dependencies
+$container->set(HotelController::class, fn() => new HotelController(
+    $twig,
+    new HotelModel(),
     $basePath
 ));
 
@@ -94,6 +128,37 @@ $app->get('/', function ($request, $response) use ($twig, $basePath) {
 //packages listing and detail pages
 $app->get('/packages',      [PackageController::class, 'index']);
 $app->get('/packages/{id}', [PackageController::class, 'show']);
+
+// Admin Routes
+$app->get('/admin', [AdminController::class, 'index']);
+
+// Admin Packages Routes
+$app->get('/admin/packages/create', [PackageController::class, 'create']);
+$app->post('/admin/packages/store', [PackageController::class, 'store']);
+$app->get('/admin/packages/{id}/edit', [PackageController::class, 'edit']);
+$app->post('/admin/packages/{id}/update', [PackageController::class, 'update']);
+$app->post('/admin/packages/{id}/delete', [PackageController::class, 'destroy']);
+
+// Admin Destinations Routes
+$app->get('/admin/destinations/create', [DestinationController::class, 'create']);
+$app->post('/admin/destinations', [DestinationController::class, 'store']);
+$app->get('/admin/destinations/{id}/edit', [DestinationController::class, 'edit']);
+$app->post('/admin/destinations/{id}/update', [DestinationController::class, 'update']);
+$app->post('/admin/destinations/{id}/delete', [DestinationController::class, 'destroy']);
+
+// Admin Hotels Routes
+$app->get('/admin/hotels/create', [HotelController::class, 'create']);
+$app->post('/admin/hotels', [HotelController::class, 'store']);
+$app->get('/admin/hotels/{id}/edit', [HotelController::class, 'edit']);
+$app->post('/admin/hotels/{id}/update', [HotelController::class, 'update']);
+$app->post('/admin/hotels/{id}/delete', [HotelController::class, 'destroy']);
+
+// Admin Guides Routes
+$app->get('/admin/guides/create', [GuideController::class, 'create']);
+$app->post('/admin/guides', [GuideController::class, 'store']);
+$app->get('/admin/guides/{id}/edit', [GuideController::class, 'edit']);
+$app->post('/admin/guides/{id}/update', [GuideController::class, 'update']);    
+$app->post('/admin/guides/{id}/delete', [GuideController::class, 'destroy']);
 
 //API endpoint for AJAX live search
 $app->get('/api/packages/search', function ($request, $response) {

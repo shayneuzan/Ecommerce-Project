@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Admin Dashboard - Traventa{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ basePath }}/assets/css/style.css">
+    <link rel="stylesheet" href="{{ basePath }}/assets/css/adminStyle.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+    <div class="page-header">
+        <div class="container d-flex justify-content-between align-items-center">
+            <div>
+                <h1 class="page-header-title">Admin Dashboard</h1>
+                <h6 class="page-header-subtitle">Manage packages, bookings, and view analytics</h6>
+            </div>
+            <a href="{{ basePath }}/" class="btn btn-outline-navy">Back to Site</a>
+        </div>
+    </div>
+
+    {% block content %}{% endblock %}
+
+    <footer class="footer py-4">
+        <div class="container text-center">
+            <p class="mb-0 text-white">&copy; 2026-Present Traventa</p>
+        </div>
+    </footer>
+</body>
+</html>

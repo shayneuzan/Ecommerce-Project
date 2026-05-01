@@ -1,0 +1,38 @@
+{% extends "admin/dashboard.html.twig" %}
+
+{% block title %}Create Guide - {{ parent() }}{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="section-title">Create Guide</h2>
+            <a href="{{ basePath }}/admin" class="btn btn-outline-navy">Back to Dashboard</a>
+        </div>
+
+        <div class="card shadow-sm border-0 rounded-4">
+            <div class="card-body">
+                <form action="{{ basePath }}/admin/guides" method="POST">
+                    <div class="row gy-3">
+                        <div class="col-md-4">
+                            <label for="title" class="form-label">Guide Name</label>
+                            <input type="text" id="title" name="title" class="form-control" value="{{ guide.title|default('') }}" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="language" class="form-label">Language</label>
+                            <input type="text" id="language" name="language" class="form-control" value="{{ guide.language|default('') }}" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="price" class="form-label">Price</label>
+                            <input type="number" id="price" name="price" class="form-control" step="0.01" min="0" value="{{ guide.price|default('') }}" required>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 d-flex justify-content-end gap-2">
+                        <a href="{{ basePath }}/admin" class="btn btn-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-teal">Create Guide</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -38,8 +38,8 @@ class PackageModel
         $package->guide_name = $guide->guide_name;
         $package->guide_language = $guide->language;
         $package->guide_price = $guide->price;
-        $package->price_child = $package->price_child;
-        $package->min_age = $package->min_age;
+        // $package->price_child = $package->price_child;
+        // $package->min_age = $package->min_age;
 
         return $package;
     }
@@ -85,6 +85,25 @@ class PackageModel
         return R::findAll('destination');
     }
 
+    //create a new package record from admin form data
+    public function create(array $data): int
+    {
+        $package = R::dispense('package');
+        $package->title = $data['title'] ?? '';
+        $package->description = $data['description'] ?? '';
+        $package->duration_days = isset($data['duration_days']) ? (int) $data['duration_days'] : 0;
+        $package->price = isset($data['price']) ? (float) $data['price'] : 0.0;
+        $package->price_child = isset($data['price_child']) ? (float) $data['price_child'] : 0.0;
+        $package->min_age = isset($data['min_age']) ? (int) $data['min_age'] : 0;
+        $package->available_slots = isset($data['available_slots']) ? (int) $data['available_slots'] : 0;
+        $package->image_url = $data['image_url'] ?? '';
+        $package->destination_id = isset($data['destination_id']) ? (int) $data['destination_id'] : 0;
+        $package->hotel_id = isset($data['hotel_id']) ? (int) $data['hotel_id'] : 0;
+        $package->guide_id = isset($data['guide_id']) ? (int) $data['guide_id'] : 0;
+
+        return R::store($package);
+    }
+
     //attach the city and country from the destination table to each package
     private function attachDestinations(array $packages): array
     {
@@ -94,5 +113,37 @@ class PackageModel
             $package->country = $destination->country;
         }
         return $packages;
+    }
+
+    // POST /admin/packages/{id}/update — update a package with form data
+    public function update(int $id, array $data): bool
+    {
+        $SelectedPackage = R::load('package', $id);
+        if (!$SelectedPackage->id) return false;
+
+        $SelectedPackage->title = $data['title'] ?? $SelectedPackage->title;
+        $SelectedPackage->description = $data['description'] ?? $SelectedPackage->description;
+        $SelectedPackage->duration_days = isset($data['duration_days']) ? (int) $data['duration_days'] : $SelectedPackage->duration_days;
+        $SelectedPackage->price = isset($data['price']) ? (float) $data['price'] : $SelectedPackage->price;
+        $SelectedPackage->price_child = isset($data['price_child']) ? (float) $data['price_child'] : $SelectedPackage->price_child;
+        $SelectedPackage->min_age = isset($data['min_age']) ? (int) $data['min_age'] : $SelectedPackage->min_age;
+        $SelectedPackage->available_slots = isset($data['available_slots']) ? (int) $data['available_slots'] : $SelectedPackage->available_slots;
+        $SelectedPackage->image_url = $data['image_url'] ?? $SelectedPackage->image_url;
+        $SelectedPackage->destination_id = isset($data['destination_id']) ? (int) $data['destination_id'] : $SelectedPackage->destination_id;
+        $SelectedPackage->hotel_id = isset($data['hotel_id']) ? (int) $data['hotel_id'] : $SelectedPackage->hotel_id;
+        $SelectedPackage->guide_id = isset($data['guide_id']) ? (int) $data['guide_id'] : $SelectedPackage->guide_id;
+
+        R::store($SelectedPackage);
+        return true;
+    }
+
+    // POST /admin/packages/{id}/delete — delete a package
+    public function delete(int $id): bool
+    {
+        $SelectedPackage = R::load('package', $id);
+        if (!$SelectedPackage->id) return false;
+
+        R::trash($SelectedPackage);
+        return true;
     }
 }

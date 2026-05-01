@@ -10,17 +10,28 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\Models\PackageModel;
+use App\Models\HotelModel;
+use App\Models\GuideModel;
+use App\Models\DestinationModel;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Twig\Environment;
 
 class PackageController
 {
+    private HotelModel $hotelModel;
+    private GuideModel $guideModel;
+    private DestinationModel $destinationModel;
+
     public function __construct(
         private Environment $twig,
         private PackageModel $model,
         private string $basePath,
-    ) {}
+    ) {
+        $this->hotelModel = new HotelModel();
+        $this->guideModel = new GuideModel();
+        $this->destinationModel = new DestinationModel();
+    }
 
     //GET /packages — show all packages with search and filter support
     public function index(Request $request, Response $response): Response
@@ -73,5 +84,77 @@ class PackageController
 
         $response->getBody()->write($html);
         return $response;
+    }
+
+    // Backend Admin Functions for managing packages (CRUD operations)
+    // GET /packages/create — show the create package page
+    public function create(Request $request, Response $response, array $args): Response {
+        $destinations = $this->destinationModel->findAll();
+        $hotels = $this->hotelModel->findAll();
+        $guides = $this->guideModel->findAll();
+
+        $html = $this->twig->render('admin/packages/create.html.twig', [
+            'basePath'    => $this->basePath,
+            'formAction'  => $this->basePath . '/admin/packages/store',
+            'package'     => [],
+            'app_lang'    => $_SESSION['lang'] ?? 'en',
+            'destinations'=> $destinations,
+            'hotels'      => $hotels,
+            'guides'      => $guides,
+        ]);
+
+        $response->getBody()->write($html);
+        return $response;
+    }
+
+    // POST /admin/packages/store — create a new package with form data
+    public function store(Request $request, Response $response): Response {
+        $data = $request->getParsedBody();
+        $this->model->create($data);
+        return $response->withHeader('Location', $this->basePath . '/admin')->withStatus(302);
+    }
+    
+    // GET /admin/packages/{id}/edit — show the edit package page
+    public function edit(Request $request, Response $response, array $args): Response {
+        $id = (int) $args['id'];
+        $package = $this->model->findById($id);
+        
+        if (!$package || !$package->id) {
+            return $response->withHeader('Location', $this->basePath . '/admin')->withStatus(302);
+        }
+        
+        $destinations = $this->destinationModel->findAll();
+        $hotels = $this->hotelModel->findAll();
+        $guides = $this->guideModel->findAll();
+
+        $html = $this->twig->render('admin/packages/edit.html.twig', [
+            'basePath'    => $this-> basePath,
+            'app_lang'    => $_SESSION['lang'] ?? 'en',
+            'package'     => $package,
+            'destinations'=> $destinations,
+            'hotels'      => $hotels,
+            'guides'      => $guides,
+        ]);
+
+        $response->getBody()->write($html);
+        return $response;
+    }
+
+    // GET /admin/packages/{id}/delete — delete a package
+    public function destroy(Request $request, Response $response, array $args): Response {
+        $id = (int) $args['id'];
+        $this->model->delete($id);
+        
+        return $response->withHeader('Location', $this->basePath . '/admin')->withStatus(302);
+    }   
+
+    // POST /admin/packages/{id}/update — update a package with form data
+    public function update(Request $request, Response $response, array $args): Response {
+        $id = (int) $args['id'];
+        $data = $request->getParsedBody();
+        
+        $this->model->update($id, $data);
+        
+        return $response->withHeader('Location', $this->basePath . '/admin')->withStatus(302);
     }
 }

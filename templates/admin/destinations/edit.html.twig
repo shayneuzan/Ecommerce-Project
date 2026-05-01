@@ -1,0 +1,41 @@
+{% extends "admin/dashboard.html.twig" %}
+
+{% block title %}Edit Destination - Admin Dashboard - Traventa{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="section-title">Edit Destination</h2>
+            <p class="text-muted">Update destination details and save your changes.</p>
+        </div>
+        <a href="{{ basePath }}/admin" class="btn btn-outline-navy">Back to Dashboard</a>
+    </div>
+
+    <div class="card shadow-sm border-0 rounded-4">
+        <div class="card-body">
+            <form action="{{ basePath }}/admin/destinations/{{ destination.id }}/update" method="post">
+                <div class="row gy-3">
+                    <div class="col-md-6">
+                        <label for="city" class="form-label">City</label>
+                        <input type="text" id="city" name="city" class="form-control" value="{{ destination.city }}" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="country" class="form-label">Country</label>
+                        <input type="text" id="country" name="country" class="form-control" value="{{ destination.country }}" required>
+                    </div>
+                    <div class="col-12">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea id="description" name="description" rows="5" class="form-control">{{ destination.description }}</textarea>
+                    </div>
+                </div>
+
+                <div class="mt-4 d-flex justify-content-end gap-2">
+                    <a href="{{ basePath }}/admin" class="btn btn-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-teal">Update Destination</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
