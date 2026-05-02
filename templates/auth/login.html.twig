@@ -15,7 +15,7 @@
                         <div class="alert alert-danger py-2">{{ error }}</div>
                     {% endif %}
 
-                    <form method="POST" action="{{ base_path }}/login">
+                    <form method="POST" action="{{ base_path }}/auth/login">
                         <div class="mb-3">
                             <label class="form-label">Email address</label>
                             <input type="email" name="email" class="form-control" required>
@@ -29,7 +29,7 @@
 
                     <hr class="my-3">
                     <p class="text-center text-muted small mb-0">
-                        Don't have an account? <a href="{{ base_path }}/register">Sign up</a>
+                        Don't have an account? <a href="{{ base_path }}/auth/register">Sign up</a>
                     </p>
                 </div>
             </div>

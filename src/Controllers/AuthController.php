@@ -69,7 +69,7 @@ class AuthController
         $user->first_name  = $firstName;
         $user->last_name   = $lastName;
         $user->email       = $email;
-        $user->password    = password_hash($password, PASSWORD_BCRYPT);
+        $user->password_hash   = password_hash($password, PASSWORD_BCRYPT);
         $user->totp_secret = $secret;
         $user->role        = 'user';
         R::store($user);
@@ -107,7 +107,7 @@ class AuthController
         $user = R::findOne('user', 'email = ?', [$email]);
 
         // Verify email + password
-        if (!$user || !password_verify($password, $user->password)) {
+        if (!$user || !password_verify($password, $user->password_hash)) {
             $html = $this->twig->render('auth/login.html.twig', [
                 'base_path' => $this->basePath,
                 'error'     => 'Invalid email or password.',
@@ -121,7 +121,7 @@ class AuthController
 
         // Redirect to 2FA verification
         return $response
-            ->withHeader('Location', $this->basePath . '/verify-2fa')
+            ->withHeader('Location', $this->basePath . '/auth/verify-2fa')
             ->withStatus(302);
     }
 
@@ -130,7 +130,7 @@ class AuthController
     {
         if (empty($_SESSION['2fa_pending_user_id'])) {
             return $response
-                ->withHeader('Location', $this->basePath . '/login')
+                ->withHeader('Location', $this->basePath . '/auth/login')
                 ->withStatus(302);
         }
 
@@ -151,7 +151,7 @@ class AuthController
 
         if (!$userId) {
             return $response
-                ->withHeader('Location', $this->basePath . '/login')
+                ->withHeader('Location', $this->basePath . '/auth/login')
                 ->withStatus(302);
         }
 
@@ -192,7 +192,7 @@ class AuthController
     {
         session_destroy();
         return $response
-            ->withHeader('Location', $this->basePath . '/login')
+            ->withHeader('Location', $this->basePath . '/auth/login')
             ->withStatus(302);
     }
 }

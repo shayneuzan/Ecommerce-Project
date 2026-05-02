@@ -135,6 +135,9 @@ $app->get('/', function ($request, $response) use ($twig, $basePath) {
         'base_path' => $basePath,
         'app_lang'  => $_SESSION['lang'] ?? 'en',
         'packages'  => $packages,
+        'app_authenticated' => $_SESSION['authenticated'] ?? false,
+        'app_user_name'    => $_SESSION['user_name'] ?? '',
+        'app_role'         => $_SESSION['user_role'] ?? '',
     ]);
 
     $response->getBody()->write($html);
@@ -146,13 +149,13 @@ $app->get('/packages',      [PackageController::class, 'index']);
 $app->get('/packages/{id}', [PackageController::class, 'show']);
 
 // Auth Routes
-$app->get('/register',    [AuthController::class, 'showRegister']);
-$app->post('/register',   [AuthController::class, 'register']);
-$app->get('/login',       [AuthController::class, 'showLogin']);
-$app->post('/login',      [AuthController::class, 'login']);
-$app->get('/verify-2fa',  [AuthController::class, 'showVerify']);
-$app->post('/verify-2fa', [AuthController::class, 'verify']);
-$app->post('/logout',     [AuthController::class, 'logout']);
+$app->get('/auth/register',    [AuthController::class, 'showRegister']);
+$app->post('/auth/register',   [AuthController::class, 'register']);
+$app->get('/auth/login',       [AuthController::class, 'showLogin']);
+$app->post('/auth/login',      [AuthController::class, 'login']);
+$app->get('/auth/verify-2fa',  [AuthController::class, 'showVerify']);
+$app->post('/auth/verify-2fa', [AuthController::class, 'verify']);
+$app->post('/auth/logout',     [AuthController::class, 'logout']);
 
 // Admin Routes
 $app->get('/admin', [AdminController::class, 'index']);
