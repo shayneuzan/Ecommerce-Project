@@ -9,15 +9,18 @@ use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 use RedBeanPHP\R;
 use App\Database;
+use App\Controllers\AuthController;
 use App\Controllers\DestinationController;
 use App\Controllers\GuideController;
 use App\Controllers\HotelController;
 use App\Controllers\PackageController;
 use App\Controllers\AdminController;
+use App\Middleware\AuthMiddleware;
 use App\Models\PackageModel;
 use App\Models\DestinationModel;
 use App\Models\GuideModel;
 use App\Models\HotelModel;
+use App\Services\OtpService;
 
 require __DIR__ . '/vendor/autoload.php';
 
@@ -45,6 +48,13 @@ $basePath = $_ENV['APP_BASE_PATH'] ?? '/traventa';
 
 $container = new \DI\Container();
 $container->set(Environment::class, $twig);
+
+ //register authcontroller 
+$container->set(AuthController::class, fn() => new AuthController(
+    $twig,
+    new OtpService(),
+    $basePath
+));
 
 //register the package controller with its dependencies
 $container->set(PackageController::class, fn(\DI\Container $c) => new PackageController(
@@ -108,6 +118,9 @@ $app->addErrorMiddleware(true, true, true);
 // ─── 7. ROUTES ────────────────────────────────────────────────────────────────
 // Routes will be added here as each feature is built
 
+// (nothing here yet — middleware gets added to route groups later when bookings are built)
+
+
 // ─── 7. ROUTES ────────────────────────────────────────────────────────────────
 $app->get('/', function ($request, $response) use ($twig, $basePath) {
     $packages = \RedBeanPHP\R::findAll('package', 'LIMIT 4'); //limit to 4 packages as starter
@@ -131,6 +144,15 @@ $app->get('/', function ($request, $response) use ($twig, $basePath) {
 //packages listing and detail pages
 $app->get('/packages',      [PackageController::class, 'index']);
 $app->get('/packages/{id}', [PackageController::class, 'show']);
+
+// Auth Routes
+$app->get('/register',    [AuthController::class, 'showRegister']);
+$app->post('/register',   [AuthController::class, 'register']);
+$app->get('/login',       [AuthController::class, 'showLogin']);
+$app->post('/login',      [AuthController::class, 'login']);
+$app->get('/verify-2fa',  [AuthController::class, 'showVerify']);
+$app->post('/verify-2fa', [AuthController::class, 'verify']);
+$app->post('/logout',     [AuthController::class, 'logout']);
 
 // Admin Routes
 $app->get('/admin', [AdminController::class, 'index']);

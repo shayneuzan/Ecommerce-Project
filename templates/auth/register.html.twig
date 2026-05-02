@@ -1,0 +1,71 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}Create Account — Traventa{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+
+            {% if step == 'qr_setup' %}
+            {# ── Step 2: Show QR code after successful registration ── #}
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4 text-center">
+                    <h4 class="mb-1">Set up Two-Factor Authentication</h4>
+                    <p class="text-muted mb-3">Scan this QR code with Google Authenticator or Authy. You will need it every time you log in.</p>
+
+                    <img src="{{ qr_code }}" alt="QR Code" class="img-fluid mb-3" style="max-width: 220px;">
+
+                    <p class="text-muted small mb-4">Can't scan? Set up your app manually using the secret in your authenticator app.</p>
+
+                    <a href="{{ base_path }}/login" class="btn btn-success w-100">
+                        I've scanned it — Go to Login
+                    </a>
+                </div>
+            </div>
+
+            {% else %}
+            {# ── Step 1: Registration form ── #}
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+                    <h4 class="mb-1">Create your account</h4>
+                    <p class="text-muted mb-4">Join Traventa and start booking your next adventure.</p>
+
+                    {% if error %}
+                        <div class="alert alert-danger py-2">{{ error }}</div>
+                    {% endif %}
+
+                    <form method="POST" action="{{ base_path }}/register">
+                        <div class="row">
+                            <div class="col-6 mb-3">
+                                <label class="form-label">First Name</label>
+                                <input type="text" name="first_name" class="form-control" required>
+                            </div>
+                            <div class="col-6 mb-3">
+                                <label class="form-label">Last Name</label>
+                                <input type="text" name="last_name" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email address</label>
+                            <input type="email" name="email" class="form-control" required>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">Password</label>
+                            <input type="password" name="password" class="form-control" required>
+                        </div>
+                        <button type="submit" class="btn btn-success w-100">Create Account</button>
+                    </form>
+
+                    <hr class="my-3">
+                    <p class="text-center text-muted small mb-0">
+                        Already have an account? <a href="{{ base_path }}/login">Log in</a>
+                    </p>
+                </div>
+            </div>
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+{% endblock %}
