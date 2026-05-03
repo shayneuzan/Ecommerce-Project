@@ -51,11 +51,14 @@ class PackageController
         $countries = $this->model->getCountries();
 
         $html = $this->twig->render('packages/index.html.twig', [
-            'base_path' => $this->basePath,
-            'app_lang'  => $_SESSION['lang'] ?? 'en',
-            'packages'  => $packages,
-            'countries' => $countries,
-            'filters'   => $params,
+            'base_path'        => $this->basePath,
+            'app_lang'         => $_SESSION['lang'] ?? 'en',
+            'packages'         => $packages,
+            'countries'        => $countries,
+            'filters'          => $params,
+            'app_authenticated' => $_SESSION['authenticated'] ?? false,
+            'app_user_name'    => $_SESSION['user_name'] ?? '',
+            'app_role'         => $_SESSION['user_role'] ?? '',
         ]);
 
         $response->getBody()->write($html);
@@ -74,9 +77,12 @@ class PackageController
         }
 
         $html = $this->twig->render('packages/show.html.twig', [
-            'base_path' => $this->basePath,
-            'app_lang'  => $_SESSION['lang'] ?? 'en',
-            'package'   => $package,
+            'base_path'         => $this->basePath,
+            'app_lang'          => $_SESSION['lang'] ?? 'en',
+            'package'           => $package,
+            'app_authenticated' => $_SESSION['authenticated'] ?? false,
+            'app_user_name'     => $_SESSION['user_name'] ?? '',
+            'app_role'          => $_SESSION['user_role'] ?? '',
         ]);
 
         $response->getBody()->write($html);
