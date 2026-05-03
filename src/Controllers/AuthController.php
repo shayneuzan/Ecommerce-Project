@@ -116,6 +116,19 @@ class AuthController
             return $response;
         }
 
+
+        if($user->role === 'admin'){
+            $_SESSION['authenticated'] = true;
+            $_SESSION['user_id'] = (int)$user->id;
+            $_SESSION['user_name'] = $user->first_name;
+            $_SESSION['user_role'] = $user->role;
+
+
+            return $response
+                ->withHeader('Location', $this->basePath . '/admin')
+                ->withStatus(302);
+        }
+
         // Store user ID in session temporarily — not fully authenticated yet
         $_SESSION['2fa_pending_user_id'] = (int) $user->id;
 
@@ -173,8 +186,10 @@ class AuthController
             $_SESSION['user_name']     = $user->first_name;
             $_SESSION['user_role']     = $user->role;
 
+            $redirectTo = $user->role === 'admin' ? '/admin' : '/';
+
             return $response
-                ->withHeader('Location', $this->basePath . '/')
+                ->withHeader('Location', $this->basePath . $redirectTo)
                 ->withStatus(302);
         }
 

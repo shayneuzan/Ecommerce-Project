@@ -24,6 +24,18 @@ class Database
         //avoid adding the same destination multiple time
         if (R::count('destination') > 0) return;
 
+        //pre-seeded admin account, use these credentials to access the admin dashboard
+        if (R::count('user') === 0){
+            $admin = R::dispense('user');
+            $admin->first_name = 'Admin';
+            $admin->last_name = 'Traventa';
+            $admin->email = 'admin@traventa.ca';
+            $admin->password_hash = password_hash('Admin1234!', PASSWORD_BCRYPT);
+            $admin->role = 'admin';
+            $admin->totp_secret = ''; //admin uses no 2FA for simplicity
+            R::store($admin);
+        }
+
         // Destinations
         $paris = R::dispense('destination');
         $paris->city = 'Paris';

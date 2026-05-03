@@ -1,3 +1,9 @@
+// Admin package form: filters hotel and guide dropdowns to only show options
+// that belong to the selected destination. Disables both selects until a
+// destination is chosen, and restores the correct filtered state on edit forms.
+
+
+
 document.addEventListener('DOMContentLoaded', function () {
     // get elements
     const destinationSelect = document.getElementById('destination_id');
