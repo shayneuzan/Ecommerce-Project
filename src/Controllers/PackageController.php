@@ -91,30 +91,23 @@ class PackageController
 
     // Backend Admin Functions for managing packages (CRUD operations)
     // GET /packages/create — show the create package page
-    public function create(Request $request, Response $response, array $args): Response {
-        $destinations = $this->destinationModel->findAll();
-        $hotels = $this->hotelModel->findAll();
-        $guides = $this->guideModel->findAll();
-
+    public function create(Request $request, Response $response): Response
+    {
         $html = $this->twig->render('admin/packages/create.html.twig', [
-            'basePath'    => $this->basePath,
-            'formAction'  => $this->basePath . '/admin/packages/store',
-            'package'     => [],
-            'app_lang'    => $_SESSION['lang'] ?? 'en',
-            'destinations'=> $destinations,
-            'hotels'      => $hotels,
-            'guides'      => $guides,
+            'basePath' => $this->basePath,
+            'app_lang' => $_SESSION['lang'] ?? 'en',
         ]);
 
         $response->getBody()->write($html);
         return $response;
     }
 
-    // POST /admin/packages/store — create a new package with form data
-    public function store(Request $request, Response $response): Response {
+    //POST /admin/packages/store — create a new destination, hotel, guide and package all at once
+    public function store(Request $request, Response $response): Response
+    {
         $data = $request->getParsedBody();
 
-        $required = ['destination_id', 'hotel_id', 'guide_id', 'title', 'price', 'duration_days', 'available_slots'];
+        $required = ['city', 'country', 'hotel_name', 'guide_name', 'title', 'price', 'duration_days', 'available_slots'];
         foreach ($required as $field) {
             if (empty($data[$field])) {
                 FlashHelper::add('danger', 'Please fill in all required fields.');

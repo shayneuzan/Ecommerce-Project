@@ -85,21 +85,45 @@ class PackageModel
         return R::findAll('destination');
     }
 
-    //create a new package record from admin form data
+    //create a new destination, hotel, guide and package all at once from the admin form when filling it in
     public function create(array $data): int
     {
+        //create the destination first
+        $destination = R::dispense('destination');
+        $destination->city = trim($data['city'] ?? '');
+        $destination->country = trim($data['country'] ?? '');
+        $destination->description = trim($data['destination_description'] ?? '');
+        R::store($destination);
+
+        //create the hotel linked to that destination
+        $hotel = R::dispense('hotel');
+        $hotel->destination_id = $destination->id;
+        $hotel->hotel_name = trim($data['hotel_name'] ?? '');
+        $hotel->address = trim($data['hotel_address'] ?? '');
+        $hotel->rating = isset($data['hotel_rating']) ? (int) $data['hotel_rating'] : 3;
+        R::store($hotel);
+
+        //create the guide linked to that destination
+        $guide = R::dispense('guide');
+        $guide->destination_id = $destination->id;
+        $guide->guide_name = trim($data['guide_name'] ?? '');
+        $guide->language = trim($data['guide_language'] ?? '');
+        $guide->price = isset($data['guide_price']) ? (float) $data['guide_price'] : 0.0;
+        R::store($guide);
+
+        //create the package linking the destination, hotel and guide together
         $package = R::dispense('package');
-        $package->title = $data['title'] ?? '';
-        $package->description = $data['description'] ?? '';
+        $package->destination_id = $destination->id;
+        $package->hotel_id = $hotel->id;
+        $package->guide_id = $guide->id;
+        $package->title = trim($data['title'] ?? '');
+        $package->description = trim($data['description'] ?? '');
         $package->duration_days = isset($data['duration_days']) ? (int) $data['duration_days'] : 0;
         $package->price = isset($data['price']) ? (float) $data['price'] : 0.0;
         $package->price_child = isset($data['price_child']) ? (float) $data['price_child'] : 0.0;
         $package->min_age = isset($data['min_age']) ? (int) $data['min_age'] : 0;
-        $package->available_slots = isset($data['available_slots']) ? (int) $data['available_slots'] : 0;
-        $package->image_url = $data['image_url'] ?? '';
-        $package->destination_id = isset($data['destination_id']) ? (int) $data['destination_id'] : 0;
-        $package->hotel_id = isset($data['hotel_id']) ? (int) $data['hotel_id'] : 0;
-        $package->guide_id = isset($data['guide_id']) ? (int) $data['guide_id'] : 0;
+        $package->available_slots = isset($data['available_slots']) ? (int) $data['available_slots'] : 10;
+        $package->image_url = trim($data['image_url'] ?? '');
 
         return R::store($package);
     }
