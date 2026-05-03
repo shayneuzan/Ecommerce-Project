@@ -9,6 +9,19 @@
             <a href="{{ basePath }}/admin" class="btn btn-outline-navy">Back to Dashboard</a>
         </div>
 
+        {# flash block for the create template #}
+        {# renders any danger or success messages above the form so the admin can see what went wrong#}
+        {% if flash is defined %}
+            {% for type, messages in flash %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ type }} alert-dismissible fade show mb-3" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+        {% endif %}
+
         <div class="card shadow-sm border-0 rounded-4">
             <div class="card-body">
                 <form action="{{ basePath }}/admin/packages/store" method="POST">

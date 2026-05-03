@@ -113,8 +113,22 @@ class PackageController
     // POST /admin/packages/store — create a new package with form data
     public function store(Request $request, Response $response): Response {
         $data = $request->getParsedBody();
+
+        $required = ['destination_id', 'hotel_id', 'guide_id', 'title', 'price', 'duration_days', 'available_slots'];
+        foreach ($required as $field) {
+            if (empty($data[$field])) {
+                FlashHelper::add('danger', 'Please fill in all required fields.');
+                return $response->withHeader('Location', $this->basePath . '/admin/packages/create')->withStatus(302);
+            }
+        }
+
+        if ((float)$data['price'] < 0 || (int)$data['duration_days'] < 1 || (int)$data['available_slots'] < 0) {
+            FlashHelper::add('danger', 'Price and slots cannot be negative, and duration must be at least 1 day.');
+            return $response->withHeader('Location', $this->basePath . '/admin/packages/create')->withStatus(302);
+        }
+
         $this->model->create($data);
-        $packageName = $data['package_name'] ?? 'Unknown Package';
+        $packageName = $data['title'] ?? 'Unknown Package';
 
         FlashHelper::add('success', "Package '$packageName' has been created successfully");
         return $response->withHeader('Location', $this->basePath . '/admin')->withStatus(302);
