@@ -16,6 +16,7 @@ use App\Controllers\HotelController;
 use App\Controllers\PackageController;
 use App\Controllers\AdminController;
 use App\Middleware\AuthMiddleware;
+use App\Middleware\AdminMiddleware;
 use App\Models\PackageModel;
 use App\Models\DestinationModel;
 use App\Models\GuideModel;
@@ -157,36 +158,40 @@ $app->get('/auth/verify-2fa',  [AuthController::class, 'showVerify']);
 $app->post('/auth/verify-2fa', [AuthController::class, 'verify']);
 $app->post('/auth/logout',     [AuthController::class, 'logout']);
 
-// Admin Routes
-$app->get('/admin', [AdminController::class, 'index']);
 
-// Admin Packages Routes
-$app->get('/admin/packages/create', [PackageController::class, 'create']);
-$app->post('/admin/packages/store', [PackageController::class, 'store']);
-$app->get('/admin/packages/{id}/edit', [PackageController::class, 'edit']);
-$app->post('/admin/packages/{id}/update', [PackageController::class, 'update']);
-$app->post('/admin/packages/{id}/delete', [PackageController::class, 'destroy']);
+// Admin Routes — protected by AdminMiddleware so only admins can access
+$app->group('/admin', function($group) {
+    $group->get('', [AdminController::class, 'index']);
 
-// Admin Destinations Routes
-$app->get('/admin/destinations/create', [DestinationController::class, 'create']);
-$app->post('/admin/destinations', [DestinationController::class, 'store']);
-$app->get('/admin/destinations/{id}/edit', [DestinationController::class, 'edit']);
-$app->post('/admin/destinations/{id}/update', [DestinationController::class, 'update']);
-$app->post('/admin/destinations/{id}/delete', [DestinationController::class, 'destroy']);
+    // Admin Packages Routes
+    $group->get('/packages/create', [PackageController::class, 'create']);
+    $group->post('/packages/store', [PackageController::class, 'store']);
+    $group->get('/packages/{id}/edit', [PackageController::class, 'edit']);
+    $group->post('/packages/{id}/update', [PackageController::class, 'update']);
+    $group->post('/packages/{id}/delete', [PackageController::class, 'destroy']);
 
-// Admin Hotels Routes
-$app->get('/admin/hotels/create', [HotelController::class, 'create']);
-$app->post('/admin/hotels', [HotelController::class, 'store']);
-$app->get('/admin/hotels/{id}/edit', [HotelController::class, 'edit']);
-$app->post('/admin/hotels/{id}/update', [HotelController::class, 'update']);
-$app->post('/admin/hotels/{id}/delete', [HotelController::class, 'destroy']);
+    // Admin Destinations Routes
+    $group->get('/destinations/create', [DestinationController::class, 'create']);
+    $group->post('/destinations', [DestinationController::class, 'store']);
+    $group->get('/destinations/{id}/edit', [DestinationController::class, 'edit']);
+    $group->post('/destinations/{id}/update', [DestinationController::class, 'update']);
+    $group->post('/destinations/{id}/delete', [DestinationController::class, 'destroy']);
 
-// Admin Guides Routes
-$app->get('/admin/guides/create', [GuideController::class, 'create']);
-$app->post('/admin/guides', [GuideController::class, 'store']);
-$app->get('/admin/guides/{id}/edit', [GuideController::class, 'edit']);
-$app->post('/admin/guides/{id}/update', [GuideController::class, 'update']);    
-$app->post('/admin/guides/{id}/delete', [GuideController::class, 'destroy']);
+    // Admin Hotels Routes
+    $group->get('/hotels/create', [HotelController::class, 'create']);
+    $group->post('/hotels', [HotelController::class, 'store']);
+    $group->get('/hotels/{id}/edit', [HotelController::class, 'edit']);
+    $group->post('/hotels/{id}/update', [HotelController::class, 'update']);
+    $group->post('/hotels/{id}/delete', [HotelController::class, 'destroy']);
+
+    // Admin Guides Routes
+    $group->get('/guides/create', [GuideController::class, 'create']);
+    $group->post('/guides', [GuideController::class, 'store']);
+    $group->get('/guides/{id}/edit', [GuideController::class, 'edit']);
+    $group->post('/guides/{id}/update', [GuideController::class, 'update']);
+    $group->post('/guides/{id}/delete', [GuideController::class, 'destroy']);
+
+})->add(new AdminMiddleware($app->getResponseFactory(), $basePath));
 
 //API endpoint for AJAX live search
 $app->get('/api/packages/search', function ($request, $response) {
