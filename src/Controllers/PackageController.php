@@ -16,6 +16,7 @@ use App\Models\DestinationModel;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Twig\Environment;
+use App\Services\FlashHelper;
 
 class PackageController
 {
@@ -107,6 +108,9 @@ class PackageController
     public function store(Request $request, Response $response): Response {
         $data = $request->getParsedBody();
         $this->model->create($data);
+        $packageName = $data['package_name'] ?? 'Unknown Package';
+
+        FlashHelper::add('success', "Package '$packageName' has been created successfully");
         return $response->withHeader('Location', $this->basePath . '/admin')->withStatus(302);
     }
     
@@ -116,6 +120,7 @@ class PackageController
         $package = $this->model->findById($id);
         
         if (!$package) { // Simplified check as findById now returns null if not found
+            FlashHelper::add('danger', "Package ID: $id not found in the data records");
             return $response->withHeader('Location', $this->basePath . '/admin')->withStatus(302);
         }
         
@@ -139,8 +144,10 @@ class PackageController
     // GET /admin/packages/{id}/delete — delete a package
     public function destroy(Request $request, Response $response, array $args): Response {
         $id = (int) $args['id'];
+        $packageName = $this->model->findById($id)->title ?? 'Unknown Package';
         $this->model->delete($id);
         
+        FlashHelper::add('success', "Package '$packageName' has been deleted successfully");
         return $response->withHeader('Location', $this->basePath . '/admin')->withStatus(302);
     }   
 
@@ -150,7 +157,9 @@ class PackageController
         $data = $request->getParsedBody();
         
         $this->model->update($id, $data);
+        $packageName = $this->model->findById($id)->title ?? 'Unknown Package';
         
+        FlashHelper::add('success', "Package '$packageName' has been updated successfully");
         return $response->withHeader('Location', $this->basePath . '/admin')->withStatus(302);
     }
 }

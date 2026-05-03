@@ -33,7 +33,7 @@
                         <select id="destination_id" name="destination_id" class="form-select" required>
                             <option value="">Select destination</option>
                             {% for destination in destinations %}
-                                <option value="{{ destination.id }}" {{ destination.id == package.destination_id ? 'selected' : '' }}>{{ destination.city }}, {{ destination.country }}</option>
+                                <option value="{{ destination.id }}" {{ destination.id == guide.destination_id ? 'selected' }}>{{ destination.city }}, {{ destination.country }}</option>
                             {% endfor %}
                         </select>
                     </div>                    

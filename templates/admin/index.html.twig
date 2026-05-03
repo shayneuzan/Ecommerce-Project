@@ -2,7 +2,7 @@
 
     {% block title %}Admin Dashboard - Traventa{% endblock %}
 
-    {% block content %}
+    {% block content %} 
 
         {#  ── Welcome Admin Title ── #}
         <div class="container mt-5">
@@ -42,6 +42,32 @@
         </div>
 
         <div class="container mb-5">
+
+        {# ── Flash messages ── #}
+        {% if flash is defined %}
+            <div class="flash-container mb-3">
+                {% for type, messages in flash %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ type }} alert-dismissible fade show mb-0 text-center" role="alert">
+                            {% if type == 'success' %}
+                                ✔
+                            {% elseif type == 'danger' %}
+                                ✖
+                            {% elseif type == 'warning' %}
+                                ⚠
+                            {% elseif type == 'info' %}
+                                i
+                            {% endif %}
+                            
+                            {{ message }}
+
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+        {% endif %}
+
             {# ── Modern Pill Navigation (from Bootstrap) ── #}
             <ul class="nav nav-pills nav-fill gap-2 p-1 small rounded-5 shadow-sm mb-4 admin-pill-nav" id="adminPillNav" role="tablist">
                 <li class="nav-item" role="presentation">
@@ -339,4 +365,5 @@
                 </div>
             </div>
         </div>
+
     {% endblock %}

@@ -29,23 +29,23 @@ class DestinationModel {
 
     public function update(int $id, array $data): bool
     {
-        $SelectedDestination = R::load('destination', $id);
-        if (!$SelectedDestination->id) return false;
+        $selectedDestination = R::load('destination', $id);
+        if (!$selectedDestination->id) return false;
 
-        $SelectedDestination->city = $data['city'] ?? $SelectedDestination->city;
-        $SelectedDestination->country = $data['country'] ?? $SelectedDestination->country;
-        $SelectedDestination->description = $data['description'] ?? $SelectedDestination->description;
+        $selectedDestination->city = $data['city'] ?? $selectedDestination->city;
+        $selectedDestination->country = $data['country'] ?? $selectedDestination->country;
+        $selectedDestination->description = $data['description'] ?? $selectedDestination->description;
 
-        R::store($SelectedDestination);
+        R::store($selectedDestination);
         return true;
     }
 
     public function delete(int $id): bool
     {
-        $SelectedDestination = R::load('destination', $id);
-        if (!$SelectedDestination->id) return false;
+        $selectedDestination = R::load('destination', $id);
+        if (!$selectedDestination->id) return false;
 
-        R::trash($SelectedDestination);
+        R::trash($selectedDestination);
         return true;
     }
 }

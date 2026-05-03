@@ -9,6 +9,7 @@ use App\Models\DestinationModel;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Twig\Environment;
+use App\Services\FlashHelper;
 
 class GuideController
 {
@@ -58,9 +59,11 @@ class GuideController
     public function store(Request $request, Response $response): Response
     {
         $data = $request->getParsedBody();
-        
+        $guideName = $data['guide_name'];
+
         $this->model->create($data);
         
+        FlashHelper::add('success', "Guide '$guideName' created successfully");
         return $response->withHeader('Location', $this->basePath . '/admin')->withStatus(302);
     }
 
@@ -71,6 +74,7 @@ class GuideController
         $destinations = $this->destinationModel->findAll();
         
         if (!$guide || !$guide->id) {
+            FlashHelper::add('danger', "Guide ID: $id not found in the data records");
             return $response->withHeader('Location', $this->basePath . '/admin')->withStatus(302);
         }
         
@@ -91,15 +95,24 @@ class GuideController
         $data = $request->getParsedBody();
         
         $this->model->update($id, $data);
-        
+        $guideName = $data['guide_name'];
+
+        FlashHelper::add('success', "Guide '$guideName' updated successfully");
         return $response->withHeader('Location', $this->basePath . '/admin')->withStatus(302);
     }
 
     public function destroy(Request $request, Response $response, array $args): Response
     {
         $id = (int) $args['id'];
-        $this->model->delete($id);
-        
+        $guideName = $this->model->findById($id)->guide_name ?? 'Unknown Guide';
+        $data = $this->model->delete($id);
+
+        if (!$data) {
+            FlashHelper::add('danger', "Guide ID: $id not found in the data records");
+            return $response->withHeader('Location', $this->basePath . '/admin')->withStatus(302);
+        }
+
+        FlashHelper::add('success', "Guide '$guideName' deleted successfully");
         return $response->withHeader('Location', $this->basePath . '/admin')->withStatus(302);
     }
 }

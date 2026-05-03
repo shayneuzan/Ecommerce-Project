@@ -9,6 +9,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Twig\Environment;
 use RedBeanPHP\R;
+use App\Services\FlashHelper;
 
 class AuthController
 {
@@ -38,12 +39,14 @@ class AuthController
         $email     = trim($data['email']      ?? '');
         $password  = trim($data['password']   ?? '');
 
+
         // Basic validation
         if (!$firstName || !$lastName || !$email || !$password) {
+            FlashHelper::add('danger', 'All fields are required.');
+            
             $html = $this->twig->render('auth/register.html.twig', [
                 'base_path' => $this->basePath,
                 'step'      => 'register',
-                'error'     => 'All fields are required.',
             ]);
             $response->getBody()->write($html);
             return $response;
@@ -52,10 +55,10 @@ class AuthController
         // Check if email already exists
         $existing = R::findOne('user', 'email = ?', [$email]);
         if ($existing) {
+            FlashHelper::add('danger', 'An account with this email already exists.');
             $html = $this->twig->render('auth/register.html.twig', [
                 'base_path' => $this->basePath,
                 'step'      => 'register',
-                'error'     => 'An account with this email already exists.',
             ]);
             $response->getBody()->write($html);
             return $response;
@@ -108,21 +111,17 @@ class AuthController
 
         // Verify email + password
         if (!$user || !password_verify($password, $user->password_hash)) {
-            $html = $this->twig->render('auth/login.html.twig', [
-                'base_path' => $this->basePath,
-                'error'     => 'Invalid email or password.',
-            ]);
-            $response->getBody()->write($html);
-            return $response;
+            FlashHelper::add('danger', 'Invalid email or password.');
+            return $response
+                ->withHeader('Location', $this->basePath . '/auth/login')
+                ->withStatus(302);
         }
-
 
         if($user->role === 'admin'){
             $_SESSION['authenticated'] = true;
             $_SESSION['user_id'] = (int)$user->id;
             $_SESSION['user_name'] = $user->first_name;
             $_SESSION['user_role'] = $user->role;
-
 
             return $response
                 ->withHeader('Location', $this->basePath . '/admin')
@@ -173,7 +172,7 @@ class AuthController
 
         if (!$user->id) {
             return $response
-                ->withHeader('Location', $this->basePath . '/login')
+                ->withHeader('Location', $this->basePath . '/auth/login')
                 ->withStatus(302);
         }
 
@@ -194,12 +193,10 @@ class AuthController
         }
 
         // Wrong code
-        $html = $this->twig->render('auth/verify.html.twig', [
-            'base_path' => $this->basePath,
-            'error'     => 'Invalid code. Please try again.',
-        ]);
-        $response->getBody()->write($html);
-        return $response;
+        FlashHelper::add('danger', 'Invalid code. Please try again.');
+        return $response
+            ->withHeader('Location', $this->basePath . '/auth/verify-2fa')
+            ->withStatus(302);
     }
 
     // ── POST /logout ──────────────────────────────────────────────────────────

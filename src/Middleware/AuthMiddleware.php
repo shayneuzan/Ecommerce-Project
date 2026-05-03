@@ -22,6 +22,6 @@ class AuthMiddleware
             return $handler->handle($request);
         }
 
-        return $this->responseFactory->createResponse(302)->withHeader('Location', $this->basePath . '/login');
+        return $this->responseFactory->createResponse(302)->withHeader('Location', $this->basePath . '/auth/login');
     }
 }

@@ -9,15 +9,47 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
-    <div class="page-header">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-navy sticky-top py-4">
         <div class="container d-flex justify-content-between align-items-center">
             <div>
                 <h1 class="page-header-title">Admin Dashboard</h1>
                 <h6 class="page-header-subtitle">Manage packages, bookings, and view analytics</h6>
             </div>
-            <a href="{{ basePath }}/" class="btn btn-outline-navy">Back to Site</a>
+            <div class="d-flex align-items-center gap-2">
+                <a href="{{ basePath }}/" class="btn btn-nav-outline">Back to Site</a>
+                <form action="{{ basePath }}/auth/logout" method="POST" class="m-0">
+                    <button type="submit" class="btn btn-danger">Logout</button>
+                </form>
+            </div>
         </div>
-    </div>
+    </nav>
+
+    {# ── Flash messages ── #}
+    {# Moved to admin/index.html.twig for better visiblity, don't know what to do with this. Remove or not? #}
+    {# {% if flash is defined %}
+        <div class="flash-container">
+            {% for type, messages in flash %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ type }} alert-dismissible fade show mb-0 text-center" role="alert">
+                        {% if type == 'success' %}
+                            ✔
+                        {% elseif type == 'danger' %}
+                            ✖
+                        {% elseif type == 'warning' %}
+                            ⚠
+                        {% elseif type == 'info' %}
+                            i
+                        {% endif %}
+                        
+                        {{ message }}
+
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+    {% endif %} #}
+    
 
     {% block content %}{% endblock %}
 

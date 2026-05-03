@@ -118,32 +118,32 @@ class PackageModel
     // POST /admin/packages/{id}/update — update a package with form data
     public function update(int $id, array $data): bool
     {
-        $SelectedPackage = R::load('package', $id);
-        if (!$SelectedPackage->id) return false;
+        $selectedPackage = R::load('package', $id);
+        if (!$selectedPackage->id) return false;
 
-        $SelectedPackage->title = $data['title'] ?? $SelectedPackage->title;
-        $SelectedPackage->description = $data['description'] ?? $SelectedPackage->description;
-        $SelectedPackage->duration_days = isset($data['duration_days']) ? (int) $data['duration_days'] : $SelectedPackage->duration_days;
-        $SelectedPackage->price = isset($data['price']) ? (float) $data['price'] : $SelectedPackage->price;
-        $SelectedPackage->price_child = isset($data['price_child']) ? (float) $data['price_child'] : $SelectedPackage->price_child;
-        $SelectedPackage->min_age = isset($data['min_age']) ? (int) $data['min_age'] : $SelectedPackage->min_age;
-        $SelectedPackage->available_slots = isset($data['available_slots']) ? (int) $data['available_slots'] : $SelectedPackage->available_slots;
-        $SelectedPackage->image_url = $data['image_url'] ?? $SelectedPackage->image_url;
-        $SelectedPackage->destination_id = isset($data['destination_id']) ? (int) $data['destination_id'] : $SelectedPackage->destination_id;
-        $SelectedPackage->hotel_id = isset($data['hotel_id']) ? (int) $data['hotel_id'] : $SelectedPackage->hotel_id;
-        $SelectedPackage->guide_id = isset($data['guide_id']) ? (int) $data['guide_id'] : $SelectedPackage->guide_id;
+        $selectedPackage->title = $data['title'] ?? $selectedPackage->title;
+        $selectedPackage->description = $data['description'] ?? $selectedPackage->description;
+        $selectedPackage->duration_days = isset($data['duration_days']) ? (int) $data['duration_days'] : $selectedPackage->duration_days;
+        $selectedPackage->price = isset($data['price']) ? (float) $data['price'] : $selectedPackage->price;
+        $selectedPackage->price_child = isset($data['price_child']) ? (float) $data['price_child'] : $selectedPackage->price_child;
+        $selectedPackage->min_age = isset($data['min_age']) ? (int) $data['min_age'] : $selectedPackage->min_age;
+        $selectedPackage->available_slots = isset($data['available_slots']) ? (int) $data['available_slots'] : $selectedPackage->available_slots;
+        $selectedPackage->image_url = $data['image_url'] ?? $selectedPackage->image_url;
+        $selectedPackage->destination_id = isset($data['destination_id']) ? (int) $data['destination_id'] : $selectedPackage->destination_id;
+        $selectedPackage->hotel_id = isset($data['hotel_id']) ? (int) $data['hotel_id'] : $selectedPackage->hotel_id;
+        $selectedPackage->guide_id = isset($data['guide_id']) ? (int) $data['guide_id'] : $selectedPackage->guide_id;
 
-        R::store($SelectedPackage);
+        R::store($selectedPackage);
         return true;
     }
 
     // POST /admin/packages/{id}/delete — delete a package
     public function delete(int $id): bool
     {
-        $SelectedPackage = R::load('package', $id);
-        if (!$SelectedPackage->id) return false;
+        $selectedPackage = R::load('package', $id);
+        if (!$selectedPackage->id) return false;
 
-        R::trash($SelectedPackage);
+        R::trash($selectedPackage);
         return true;
     }
 }

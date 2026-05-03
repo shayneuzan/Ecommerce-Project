@@ -22,6 +22,7 @@ use App\Models\DestinationModel;
 use App\Models\GuideModel;
 use App\Models\HotelModel;
 use App\Services\OtpService;
+use App\Services\FlashHelper;
 
 require __DIR__ . '/vendor/autoload.php';
 
@@ -43,6 +44,9 @@ $twig   = new Environment($loader, [
     'cache'       => false,
     'auto_reload' => true,
 ]);
+
+// Make flash messages available in all Twig templates as 'flash'
+$twig->addGlobal('flash', FlashHelper::get()); 
 
 // ─── 4. DEPENDENCY INJECTION CONTAINER ───────────────────────────────────────
 $basePath = $_ENV['APP_BASE_PATH'] ?? '/traventa';
@@ -115,20 +119,19 @@ $app->addErrorMiddleware(true, true, true);
 
 // ─── 6. MIDDLEWARE ────────────────────────────────────────────────────────────
 // Auth and admin middleware will be registered here
+$adminMiddleware = new AdminMiddleware($app->getResponseFactory(), $basePath);
+$authMiddleware  = new AuthMiddleware($app->getResponseFactory(), $basePath); // not needed yet (will be used for favourites and bookings)
 
 // ─── 7. ROUTES ────────────────────────────────────────────────────────────────
 // Routes will be added here as each feature is built
 
-// (nothing here yet — middleware gets added to route groups later when bookings are built)
-
-
 // ─── 7. ROUTES ────────────────────────────────────────────────────────────────
 $app->get('/', function ($request, $response) use ($twig, $basePath) {
-    $packages = \RedBeanPHP\R::findAll('package', 'LIMIT 4'); //limit to 4 packages as starter
+    $packages = R::findAll('package', 'LIMIT 4'); //limit to 4 packages as starter
 
     //attach destination city to each package
     foreach ($packages as $package) {
-        $destination = \RedBeanPHP\R::load('destination', $package->destination_id);
+        $destination = R::load('destination', $package->destination_id);
         $package->city = $destination->city;
     }
 
@@ -150,14 +153,15 @@ $app->get('/packages',      [PackageController::class, 'index']);
 $app->get('/packages/{id}', [PackageController::class, 'show']);
 
 // Auth Routes
-$app->get('/auth/register',    [AuthController::class, 'showRegister']);
-$app->post('/auth/register',   [AuthController::class, 'register']);
-$app->get('/auth/login',       [AuthController::class, 'showLogin']);
-$app->post('/auth/login',      [AuthController::class, 'login']);
-$app->get('/auth/verify-2fa',  [AuthController::class, 'showVerify']);
-$app->post('/auth/verify-2fa', [AuthController::class, 'verify']);
-$app->post('/auth/logout',     [AuthController::class, 'logout']);
-
+$app->group('/auth', function($group) {
+    $group->get('/register', [AuthController::class, 'showRegister']);
+    $group->post('/register', [AuthController::class, 'register']);
+    $group->get('/login', [AuthController::class, 'showLogin']);
+    $group->post('/login', [AuthController::class, 'login']);
+    $group->get('/verify-2fa', [AuthController::class, 'showVerify']);
+    $group->post('/verify-2fa', [AuthController::class, 'verify']);
+    $group->post('/logout', [AuthController::class, 'logout']);
+});
 
 // Admin Routes — protected by AdminMiddleware so only admins can access
 $app->group('/admin', function($group) {
@@ -191,7 +195,7 @@ $app->group('/admin', function($group) {
     $group->post('/guides/{id}/update', [GuideController::class, 'update']);
     $group->post('/guides/{id}/delete', [GuideController::class, 'destroy']);
 
-})->add(new AdminMiddleware($app->getResponseFactory(), $basePath));
+})->add($adminMiddleware);
 
 //API endpoint for AJAX live search
 $app->get('/api/packages/search', function ($request, $response) {

@@ -31,9 +31,26 @@
                     <h4 class="mb-1">Create your account</h4>
                     <p class="text-muted mb-4">Join Traventa and start booking your next adventure.</p>
 
-                    {% if error %}
-                        <div class="alert alert-danger py-2">{{ error }}</div>
-                    {% endif %}
+                    {# ── Flash messages ── #}
+                    {% if flash is defined %}
+                        {% for type, messages in flash %}
+                            {% for message in messages %}
+                                <div class="alert alert-{{ type }} alert-dismissible fade show mb-4" role="alert">
+                                    {% if type == 'success' %}
+                                        ✔
+                                    {% elseif type == 'danger' %}
+                                        ✖
+                                    {% elseif type == 'warning' %}
+                                        ⚠
+                                    {% elseif type == 'info' %}
+                                        i
+                                    {% endif %}                    
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                </div>
+                            {% endfor %}
+                        {% endfor %}
+                    {% endif %} 
 
                     <form method="POST" action="{{ base_path }}/auth/register">
                         <div class="row">

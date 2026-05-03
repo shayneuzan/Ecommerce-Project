@@ -15,19 +15,6 @@
     {% block head %}{% endblock %}
 </head>
 <body>
-
-    {# ── Flash messages ── #}
-    {% if flash is defined %}
-        {% for type, messages in flash %}
-            {% for message in messages %}
-                <div class="alert alert-{{ type }} alert-dismissible fade show mb-0 rounded-0" role="alert">
-                    {{ message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-            {% endfor %}
-        {% endfor %}
-    {% endif %}
-
     {# ── Navbar ── #}
     <nav class="navbar navbar-expand-lg navbar-dark bg-navy sticky-top">
         <div class="container">
@@ -53,6 +40,11 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ base_path }}/favourites">Favourites</a>
                         </li>
+                        {% if app_role is defined and app_role == 'admin' %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ base_path }}/admin" style="color: #FFD700 !important; font-weight: 600;">Admin Dashboard</a>
+                            </li>
+                        {% endif %}
                     {% endif %}
                 </ul>
 
@@ -75,8 +67,7 @@
                     {% endif %}
 
                 </div>
-            </div>
-
+            </div>      
         </div>
     </nav>
 

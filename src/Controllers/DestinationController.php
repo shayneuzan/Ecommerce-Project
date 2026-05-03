@@ -8,6 +8,7 @@ use App\Models\DestinationModel;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Twig\Environment;
+use App\Services\FlashHelper;
 
 class DestinationController
 {
@@ -53,6 +54,7 @@ class DestinationController
         
         $this->model->create($data);
         
+        FlashHelper::add('success', 'Destination created successfully');
         return $response->withHeader('Location', $this->basePath . '/admin')->withStatus(302);
     }
 
@@ -62,6 +64,7 @@ class DestinationController
         $destination = $this->model->findById($id);
         
         if (!$destination || !$destination->id) {
+            FlashHelper::add('danger', 'Destination not found');
             return $response->withHeader('Location', $this->basePath . '/admin')->withStatus(302);
         }
         
@@ -82,11 +85,20 @@ class DestinationController
         
         $this->model->update($id, $data);
         
+        FlashHelper::add('success', 'Destination updated successfully');
         return $response->withHeader('Location', $this->basePath . '/admin')->withStatus(302);
     } 
     public function destroy(Request $request, Response $response, array $args): Response
     {
         $id = (int) $args['id'];
+        $data = $this->model->delete($id);
+
+        if (!$data) {
+            FlashHelper::add('danger', 'Destination not found');
+            return $response->withHeader('Location', $this->basePath . '/admin')->withStatus(302);
+        }
+
+        FlashHelper::add('success', 'Destination deleted successfully');
         $this->model->delete($id);
         
         return $response->withHeader('Location', $this->basePath . '/admin')->withStatus(302);
