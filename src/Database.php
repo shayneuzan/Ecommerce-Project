@@ -24,7 +24,7 @@ class Database
         //avoid adding the same destination multiple time
         if (R::count('destination') > 0) return;
 
-        //pre-seeded admin account, use these credentials to access the admin dashboard
+        //pre seeded admin account, use these credentials to access the admin dashboard
         if (R::count('user') === 0){
             $admin = R::dispense('user');
             $admin->first_name = 'Admin';
@@ -85,6 +85,12 @@ class Database
         $newyork->description = 'The city that never sleeps, packed with iconic landmarks, culture and entertainment.';
         R::store($newyork);
 
+        $athens = R::dispense('destination');
+        $athens->city = 'Athens';
+        $athens->country = 'Greece';
+        $athens->description = 'The birthplace of democracy and Western civilization, home to the Acropolis, ancient ruins and vibrant Mediterranean culture.';
+        R::store($athens);
+
         // Hotels
         $hotel1 = R::dispense('hotel');
         $hotel1->destination_id = $paris->id;
@@ -142,6 +148,13 @@ class Database
         $hotel8->rating = 4;
         R::store($hotel8);
 
+        $hotel9 = R::dispense('hotel');
+        $hotel9->destination_id = $athens->id;
+        $hotel9->hotel_name = 'Hotel Acropolis View';
+        $hotel9->address = '9 Dionysiou Areopagitou, Athens';
+        $hotel9->rating = 5;
+        R::store($hotel9);
+
         // Guides
         $guide1 = R::dispense('guide');
         $guide1->destination_id = $paris->id;
@@ -198,6 +211,13 @@ class Database
         $guide8->language = 'English';
         $guide8->price = 125.00;
         R::store($guide8);
+
+        $guide9 = R::dispense('guide');
+        $guide9->destination_id = $athens->id;
+        $guide9->guide_name = 'Nikos Papadopoulos';
+        $guide9->language = 'English, Greek';
+        $guide9->price = 115.00;
+        R::store($guide9);
 
         //Packages
         $pkg1 = R::dispense('package');
@@ -311,5 +331,19 @@ class Database
         $pkg8->available_slots = 10;
         $pkg8->image_url = 'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=800';
         R::store($pkg8);
+
+        $pkg9 = R::dispense('package');
+        $pkg9->destination_id = $athens->id;
+        $pkg9->hotel_id = $hotel9->id;
+        $pkg9->guide_id = $guide9->id;
+        $pkg9->title = 'Athens Ancient Discovery';
+        $pkg9->description = 'Walk through thousands of years of history with visits to the Acropolis, Parthenon, ancient Agora and the National Archaeological Museum.';
+        $pkg9->duration_days = 5;
+        $pkg9->price = 1149.00;
+        $pkg9->price_child = 689.00;
+        $pkg9->min_age = 0;
+        $pkg9->available_slots = 12;
+        $pkg9->image_url = 'https://images.unsplash.com/photo-1555993539-1732b0258235?w=800';
+        R::store($pkg9);
     }
 }
