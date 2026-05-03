@@ -153,10 +153,12 @@
                                     </td>
                                     <td>{{ package.description }}</td>
                                     <td>
-                                        <a href="{{ basePath }}/admin/packages/{{ package.id }}/edit" class="btn btn-sm btn-outline-primary me-2">Edit</a>
-                                        <form action="{{ basePath }}/admin/packages/{{ package.id }}/delete" method="POST" class="d-inline">
-                                            <button type="submit" onclick="return confirm('Are you sure?')" class="btn btn-sm btn-outline-danger">Delete</button>
-                                        </form>
+                                        <div class="d-flex flex-column gap-2">
+                                            <a href="{{ basePath }}/admin/packages/{{ package.id }}/edit" class="btn btn-sm btn-outline-primary">Edit</a>
+                                            <form action="{{ basePath }}/admin/packages/{{ package.id }}/delete" method="POST">
+                                                <button type="submit" onclick="return confirm('Are you sure?')" class="btn btn-sm btn-outline-danger">Delete</button>
+                                            </form>
+                                        </div>
                                     </td>
                                 </tr>
                                 {% else %}
@@ -234,16 +236,12 @@
                                                 </div>
                                             </td>
                                             <td>
-                                                <a href="{{ basePath }}/admin/destinations/{{ destination.id }}/edit"
-                                                class="btn btn-sm btn-outline-primary rounded-pill">Edit</a>
-                                                <form action="{{ basePath }}/admin/destinations/{{ destination.id }}/delete"
-                                                    method="POST" class="d-inline">
-                                                    <button type="submit"
-                                                            onclick="return confirm('Are you sure?')"
-                                                            class="btn btn-sm btn-outline-danger rounded-pill">
-                                                        Delete
-                                                    </button>
-                                                </form>
+                                                <div class="d-flex flex-column gap-2">
+                                                    <a href="{{ basePath }}/admin/destinations/{{ destination.id }}/edit" class="btn btn-sm btn-outline-primary rounded-pill">Edit</a>
+                                                    <form action="{{ basePath }}/admin/destinations/{{ destination.id }}/delete" method="POST">
+                                                        <button type="submit" onclick="return confirm('Are you sure?')" class="btn btn-sm btn-outline-danger rounded-pill">Delete</button>
+                                                    </form>
+                                                </div>
                                             </td>
                                         </tr>
                                         {% else %}
@@ -293,10 +291,12 @@
                                             {% endfor %}
                                             </td>
                                             <td>
-                                                <a href="{{ basePath }}/admin/guides/{{ guide.id }}/edit" class="btn btn-sm btn-outline-primary rounded-pill">Edit</a>
-                                                <form action="{{ basePath }}/admin/guides/{{ guide.id }}/delete" method="POST" class="d-inline">
-                                                    <button type="submit" onclick="return confirm('Are you sure?')" class="btn btn-sm btn-outline-danger rounded-pill">Delete</button>
-                                                </form>
+                                                <div class="d-flex flex-column gap-2">
+                                                    <a href="{{ basePath }}/admin/guides/{{ guide.id }}/edit" class="btn btn-sm btn-outline-primary rounded-pill">Edit</a>
+                                                    <form action="{{ basePath }}/admin/guides/{{ guide.id }}/delete" method="POST">
+                                                        <button type="submit" onclick="return confirm('Are you sure?')" class="btn btn-sm btn-outline-danger rounded-pill">Delete</button>
+                                                    </form>
+                                                </div>
                                             </td>
                                         </tr>
                                         {% else %}
@@ -343,10 +343,12 @@
                                             </td>
                                             <td>{{ hotel.rating }}/5</td>
                                             <td>
-                                                <a href="{{ basePath }}/admin/hotels/{{ hotel.id }}/edit" class="btn btn-sm btn-outline-primary rounded-pill">Edit</a>
-                                                <form action="{{ basePath }}/admin/hotels/{{ hotel.id }}/delete" method="POST" class="d-inline">
-                                                    <button type="submit" onclick="return confirm('Are you sure?')" class="btn btn-sm btn-outline-danger rounded-pill">Delete</button>
-                                                </form>
+                                                <div class="d-flex flex-column gap-2">
+                                                    <a href="{{ basePath }}/admin/hotels/{{ hotel.id }}/edit" class="btn btn-sm btn-outline-primary rounded-pill">Edit</a>
+                                                    <form action="{{ basePath }}/admin/hotels/{{ hotel.id }}/delete" method="POST">
+                                                        <button type="submit" onclick="return confirm('Are you sure?')" class="btn btn-sm btn-outline-danger rounded-pill">Delete</button>
+                                                    </form>
+                                                </div>
                                             </td>
                                         </tr>
                                         {% else %}
