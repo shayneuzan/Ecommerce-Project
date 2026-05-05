@@ -123,9 +123,6 @@ $adminMiddleware = new AdminMiddleware($app->getResponseFactory(), $basePath);
 $authMiddleware  = new AuthMiddleware($app->getResponseFactory(), $basePath); // not needed yet (will be used for favourites and bookings)
 
 // ─── 7. ROUTES ────────────────────────────────────────────────────────────────
-// Routes will be added here as each feature is built
-
-// ─── 7. ROUTES ────────────────────────────────────────────────────────────────
 $app->get('/', function ($request, $response) use ($twig, $basePath) {
     $packages = R::findAll('package', 'LIMIT 4'); //limit to 4 packages as starter
 
