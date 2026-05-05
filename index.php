@@ -23,6 +23,9 @@ use App\Models\GuideModel;
 use App\Models\HotelModel;
 use App\Services\OtpService;
 use App\Services\FlashHelper;
+use App\Controllers\BookingController;
+use App\Models\BookingModel;
+use App\Services\PricingService;
 
 require __DIR__ . '/vendor/autoload.php';
 
@@ -99,6 +102,12 @@ $container->set(HotelController::class, fn() => new HotelController(
 ));
 
 // Controllers will be registered here as the project grows
+$container->set(BookingController::class, fn() => new BookingController(
+    $twig,
+    new BookingModel(),
+    new PricingService(),
+    $basePath
+));
 
 // ─── 5. APPLICATION ───────────────────────────────────────────────────────────
 AppFactory::setContainer($container);
@@ -114,27 +123,27 @@ $app->addBodyParsingMiddleware();
 $app->addRoutingMiddleware();
 
 // Register the error middleware (shows errors in development)
-// $app->addErrorMiddleware(true, true, true);
+$app->addErrorMiddleware(true, true, true);
 
-$displayErrors = ($_ENV['APP_ENV'] ?? 'production') === 'development';
+// $displayErrors = ($_ENV['APP_ENV'] ?? 'production') === 'development';
 
-$errorMiddleware = $app->addErrorMiddleware($displayErrors, true, true);
+// $errorMiddleware = $app->addErrorMiddleware($displayErrors, true, true);
 
-$errorMiddleware->setErrorHandler(
-    \Slim\Exception\HttpNotFoundException::class,
-    function ($request, $exception) use ($twig, $basePath) {
-        $html = $twig->render('errors/404.html.twig', [
-            'base_path'         => $basePath,
-            'app_authenticated' => $_SESSION['authenticated'] ?? false,
-            'app_user_name'     => $_SESSION['user_name'] ?? '',
-            'app_role'          => $_SESSION['user_role'] ?? '',
-            'app_lang'          => $_SESSION['lang'] ?? 'en',
-        ]);
-        $response = new \Slim\Psr7\Response();
-        $response->getBody()->write($html);
-        return $response->withStatus(404);
-    }
-);
+// $errorMiddleware->setErrorHandler(
+//     \Slim\Exception\HttpNotFoundException::class,
+//     function ($request, $exception) use ($twig, $basePath) {
+//         $html = $twig->render('errors/404.html.twig', [
+//             'base_path'         => $basePath,
+//             'app_authenticated' => $_SESSION['authenticated'] ?? false,
+//             'app_user_name'     => $_SESSION['user_name'] ?? '',
+//             'app_role'          => $_SESSION['user_role'] ?? '',
+//             'app_lang'          => $_SESSION['lang'] ?? 'en',
+//         ]);
+//         $response = new \Slim\Psr7\Response();
+//         $response->getBody()->write($html);
+//         return $response->withStatus(404);
+//     }
+// );
 
 
 // ─── 6. MIDDLEWARE ────────────────────────────────────────────────────────────
@@ -213,6 +222,13 @@ $app->group('/admin', function($group) {
     $group->post('/guides/{id}/delete', [GuideController::class, 'destroy']);
 
 })->add($adminMiddleware);
+
+// Booking routes for customer flow
+$app->get('/bookings/create/{id}', [BookingController::class, 'showBooking']);
+$app->post('/booking/calculate', [BookingController::class, 'calculatePrice']);
+$app->post('/booking/checkout/{id}', [BookingController::class, 'checkout']);
+$app->post('/booking/process', [BookingController::class, 'payment']);
+$app->get('/booking/confirmation/{id}', [BookingController::class, 'confirmation']);
 
 //API endpoint for AJAX live search
 $app->get('/api/packages/search', function ($request, $response) {
