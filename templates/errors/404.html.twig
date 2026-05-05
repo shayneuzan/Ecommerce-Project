@@ -1,0 +1,16 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}Page Not Found — Traventa{% endblock %}
+
+{% block content %}
+<div class="container py-5 text-center">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h1 class="display-1 fw-bold text-teal">404</h1>
+            <h2 class="mb-3">Page Not Found</h2>
+            <p class="text-muted mb-4">Looks like this destination doesn't exist yet. We're still building Traventa!</p>
+            <a href="{{ base_path }}/" class="btn btn-success px-4">Back to Home</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
