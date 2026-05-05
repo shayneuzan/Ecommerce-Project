@@ -114,7 +114,27 @@ $app->addBodyParsingMiddleware();
 $app->addRoutingMiddleware();
 
 // Register the error middleware (shows errors in development)
-$app->addErrorMiddleware(true, true, true);
+// $app->addErrorMiddleware(true, true, true);
+
+$displayErrors = ($_ENV['APP_ENV'] ?? 'production') === 'development';
+
+$errorMiddleware = $app->addErrorMiddleware($displayErrors, true, true);
+
+$errorMiddleware->setErrorHandler(
+    \Slim\Exception\HttpNotFoundException::class,
+    function ($request, $exception) use ($twig, $basePath) {
+        $html = $twig->render('errors/404.html.twig', [
+            'base_path'         => $basePath,
+            'app_authenticated' => $_SESSION['authenticated'] ?? false,
+            'app_user_name'     => $_SESSION['user_name'] ?? '',
+            'app_role'          => $_SESSION['user_role'] ?? '',
+            'app_lang'          => $_SESSION['lang'] ?? 'en',
+        ]);
+        $response = new \Slim\Psr7\Response();
+        $response->getBody()->write($html);
+        return $response->withStatus(404);
+    }
+);
 
 
 // ─── 6. MIDDLEWARE ────────────────────────────────────────────────────────────
