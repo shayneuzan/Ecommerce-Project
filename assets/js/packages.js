@@ -1,5 +1,6 @@
 //This class handles the live search on the packages page
-//sends a request to the API as the user types and updates the package cards without reloading the page
+//sends a request to the API as the user types and updates the package cards without reloading 
+// the page
 
 
 //wait until the page is fully loaded before running anything

@@ -23,33 +23,6 @@
         </div>
     </nav>
 
-    {# ── Flash messages ── #}
-    {# Moved to admin/index.html.twig for better visiblity, don't know what to do with this. Remove or not? #}
-    {# {% if flash is defined %}
-        <div class="flash-container">
-            {% for type, messages in flash %}
-                {% for message in messages %}
-                    <div class="alert alert-{{ type }} alert-dismissible fade show mb-0 text-center" role="alert">
-                        {% if type == 'success' %}
-                            ✔
-                        {% elseif type == 'danger' %}
-                            ✖
-                        {% elseif type == 'warning' %}
-                            ⚠
-                        {% elseif type == 'info' %}
-                            i
-                        {% endif %}
-                        
-                        {{ message }}
-
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    </div>
-                {% endfor %}
-            {% endfor %}
-        </div>
-    {% endif %} #}
-    
-
     {% block content %}{% endblock %}
 
     <footer class="footer py-4">
