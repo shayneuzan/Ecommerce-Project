@@ -27,8 +27,9 @@ Traventa is a vacation package booking website that allows users to search desti
 1. Clone the repository
 2. Run `composer install`
 3. Copy `.env.example` to `.env` and fill in your database credentials
-4. Create a MariaDB database named `traventa`
-5. Visit `http://localhost/traventa` in your browser
+4. Create a MariaDB database named `traventa` in phpMyAdmin
+5. Visit `http://localhost/traventa/setup.php` to create all the database tables automatically
+6. Visit `http://localhost/traventa` to seed the database and launch the app
 
 ## Features
 - User registration & login with 2FA
