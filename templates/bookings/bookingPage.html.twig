@@ -1,0 +1,261 @@
+{# Booking Page - select travel date and passengers #}
+
+{% extends "layout.html.twig" %}
+
+{% block title %}Book {{ package.title }}{% endblock %}
+
+{% block content %}
+
+
+<section class="page-hero">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ base_path }}/" class="text-dark">Home</a></li>
+                <li class="breadcrumb-item"><a href="{{ base_path }}/packages" class="text-dark">Packages</a></li>
+                <li class="breadcrumb-item active text-dark">{{ package.title }}</li>
+            </ol>
+        </nav>
+        <h1 class="page-hero-title">{{ package.title }}</h1>
+        <p class="page-hero-subtitle">{{ package.city }}, {{ package.country }}</p>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+
+       
+
+        <div class="row g-4">
+
+            {# ── LEFT: Booking Form ── #}
+            <div class="col-lg-8">
+                <form id="bookingForm" action="{{ basePath }}/booking/checkout/{{ package.id }}" method="POST">
+
+                    {# Hidden fields #}
+                    <input type="hidden" name="package_id"  value="{{ package.id }}">
+                    <input type="hidden" name="base_price"  value="{{ package.price }}">
+
+                    {# ── Travel Date ── #}
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title mb-3">Travel Date</h5>
+                            <div class="col-md-6">
+                                <label for="travel_date" class="form-label">Select your departure date</label>
+                                <input
+                                    type="date"
+                                    class="form-control"
+                                    id="travel_date"
+                                    name="travel_date"
+                                    required
+                                    min="{{ "now"|date("Y-m-d") }}"
+                                >
+                            </div>
+                        </div>
+                    </div>
+
+                    {# ── Passengers ── #}
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="card-title mb-0">Passengers</h5>
+                                <button type="button" class="btn btn-outline-teal btn-sm" id="addPassenger">
+                                    + Add Passenger
+                                </button>
+                            </div>
+
+                            <div id="passengerList">
+                                {# First passenger row — always shown #}
+                                <div class="passenger-row card bg-light mb-3 p-3" data-index="0">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span class="fw-semibold small text-muted">Passenger 1</span>
+                                    </div>
+                                    <div class="row g-2">
+                                        <div class="col-md-4">
+                                            <label class="form-label small">First Name</label>
+                                            <input type="text" class="form-control form-control-sm" name="passengers[0][first_name]" required>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label small">Last Name</label>
+                                            <input type="text" class="form-control form-control-sm" name="passengers[0][last_name]" required>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label small">Age</label>
+                                            <input type="number" class="form-control form-control-sm passenger-age" name="passengers[0][age]" min="0" max="120" required>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <p class="text-muted small mt-2 mb-0">
+                                Infant (0–2): free &nbsp;·&nbsp;
+                                Child (3–12): 20% off &nbsp;·&nbsp;
+                                Senior (60+): 20% off
+                            </p>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-teal btn-lg w-100">
+                        Proceed to Checkout →
+                    </button>
+
+                </form>
+            </div>
+
+            {# ── RIGHT: Price Summary ── #}
+            <div class="col-lg-4">
+                <div class="card sticky-top" style="top: 1.5rem;">
+                    <div class="card-body">
+
+                        {# Package summary #}
+                        <img
+                            src="{{ package.image_url ?? 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800' }}"
+                            class="img-fluid rounded mb-3"
+                            alt="{{ package.title }}"
+                        >
+                        <h6 class="fw-bold">{{ package.title }}</h6>
+                        <p class="text-muted small mb-3">{{ package.duration_days }} days · {{ package.available_slots }} slots left</p>
+
+                        <hr>
+
+                        {# Price breakdown — updated via JS #}
+                        <h6 class="fw-semibold mb-3">Price Summary</h6>
+
+                        <div id="priceSummary">
+                            <p class="text-muted small text-center py-3">
+                                Add a travel date and passengers to see pricing.
+                            </p>
+                        </div>
+
+                        <hr>
+
+                        <div class="d-flex justify-content-between fw-bold">
+                            <span>Total</span>
+                            <span class="text-teal" id="totalPrice">—</span>
+                        </div>
+
+                        <p class="text-muted small mt-2 mb-0">Includes all taxes and fees</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const BASE_PATH  = "{{ basePath }}";
+    const BASE_PRICE = {{ package.price }};
+    let passengerCount = 1;
+
+    // ── Add passenger row ──
+    document.getElementById('addPassenger').addEventListener('click', () => {
+        const index = passengerCount;
+        const list  = document.getElementById('passengerList');
+
+        const row = document.createElement('div');
+        row.className   = 'passenger-row card bg-light mb-3 p-3';
+        row.dataset.index = index;
+        row.innerHTML = `
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="fw-semibold small text-muted">Passenger ${index + 1}</span>
+                <button type="button" class="btn btn-sm btn-outline-danger remove-passenger">Remove</button>
+            </div>
+            <div class="row g-2">
+                <div class="col-md-4">
+                    <label class="form-label small">First Name</label>
+                    <input type="text" class="form-control form-control-sm" name="passengers[${index}][first_name]" required>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label small">Last Name</label>
+                    <input type="text" class="form-control form-control-sm" name="passengers[${index}][last_name]" required>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label small">Age</label>
+                    <input type="number" class="form-control form-control-sm passenger-age" name="passengers[${index}][age]" min="0" max="120" required>
+                </div>
+            </div>
+        `;
+
+        list.appendChild(row);
+        passengerCount++;
+        recalculate();
+    });
+
+    // ── Remove passenger row ──
+    document.getElementById('passengerList').addEventListener('click', (e) => {
+        if (e.target.classList.contains('remove-passenger')) {
+            e.target.closest('.passenger-row').remove();
+            recalculate();
+        }
+    });
+
+    // ── Recalculate on change ──
+    document.getElementById('bookingForm').addEventListener('change', recalculate);
+    document.getElementById('bookingForm').addEventListener('input', recalculate);
+
+    function recalculate() {
+        const travelDate = document.getElementById('travel_date').value;
+        const ageInputs  = document.querySelectorAll('.passenger-age');
+        const passengers = [];
+
+        ageInputs.forEach(input => {
+            if (input.value !== '') {
+                passengers.push({ age: parseInt(input.value) });
+            }
+        });
+
+        if (!travelDate || passengers.length === 0) return;
+
+        fetch(`${BASE_PATH}/booking/calculate`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                base_price:  BASE_PRICE,
+                travel_date: travelDate,
+                passengers:  passengers
+            })
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.error) return;
+            renderPriceSummary(data);
+        })
+        .catch(console.error);
+    }
+
+    function renderPriceSummary(data) {
+        const summary = document.getElementById('priceSummary');
+        const total   = document.getElementById('totalPrice');
+
+        let rows = '';
+        data.breakdown.forEach(p => {
+            const label = p.type.charAt(0).toUpperCase() + p.type.slice(1);
+            const price = p.price === 0 ? 'Free' : `$${p.price.toFixed(2)}`;
+            rows += `
+                <div class="d-flex justify-content-between small mb-1">
+                    <span class="text-muted">${label} (age ${p.age})</span>
+                    <span>${price}</span>
+                </div>
+            `;
+        });
+
+        rows += `
+            <div class="d-flex justify-content-between small mb-1 mt-2 pt-2 border-top">
+                <span class="text-muted">Subtotal</span>
+                <span>$${data.subtotal.toFixed(2)}</span>
+            </div>
+            <div class="d-flex justify-content-between small mb-1">
+                <span class="text-muted">Tax (15%)</span>
+                <span>$${(data.total - data.subtotal).toFixed(2)}</span>
+            </div>
+        `;
+
+        summary.innerHTML = rows;
+        total.textContent = `$${data.total.toFixed(2)}`;
+    }
+</script>
+{% endblock %}

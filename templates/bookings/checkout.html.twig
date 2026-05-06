@@ -1,0 +1,191 @@
+{# Checkout Page - order summary + payment #}
+
+{% extends "layout.html.twig" %}
+
+{% block title %}Checkout{% endblock %}
+
+{% block content %}
+
+<section class="py-5">
+    <div class="container">
+
+        {# ── Page Header ── #}
+        <div class="mb-4">
+            <h2 class="section-title">Checkout</h2>
+            <p class="text-muted">Review your order and complete payment</p>
+        </div>
+
+        {# ── Error message ── #}
+        {% if error %}
+            <div class="alert alert-danger mb-4">{{ error }}</div>
+        {% endif %}
+
+        <div class="row g-4">
+
+            {# ── LEFT: Payment Form ── #}
+            <div class="col-lg-7">
+                <form action="{{ basePath }}/booking/process" method="POST">
+
+                    {# ── Card Details ── #}
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title mb-4">Payment Details</h5>
+
+                            <div class="mb-3">
+                                <label class="form-label">Cardholder Name</label>
+                                <input type="text" class="form-control" name="cardholder_name" placeholder="John Doe" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Card Number</label>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    name="card_number"
+                                    placeholder="1234 5678 9012 3456"
+                                    maxlength="19"
+                                    required
+                                >
+                            </div>
+
+                            <div class="row g-3">
+                                <div class="col-6">
+                                    <label class="form-label">Expiry Date</label>
+                                    <input type="text" class="form-control" name="expiry" placeholder="MM/YY" maxlength="5" required>
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label">CVV</label>
+                                    <input type="text" class="form-control" name="cvv" placeholder="123" maxlength="4" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {# ── Billing Info ── #}
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title mb-4">Billing Address</h5>
+
+                            <div class="mb-3">
+                                <label class="form-label">Full Name</label>
+                                <input type="text" class="form-control" name="billing_name" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-control" name="billing_email" required>
+                            </div>
+
+                            <div class="row g-3">
+                                <div class="col-8">
+                                    <label class="form-label">City</label>
+                                    <input type="text" class="form-control" name="billing_city" required>
+                                </div>
+                                <div class="col-4">
+                                    <label class="form-label">Country</label>
+                                    <input type="text" class="form-control" name="billing_country" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-teal btn-lg w-100">
+                        Confirm & Pay ${{ pricing.total }}
+                    </button>
+
+                    <p class="text-muted small text-center mt-2">
+                         Your payment is secure and encrypted
+                    </p>
+
+                </form>
+            </div>
+
+            {# ── RIGHT: Order Summary ── #}
+            <div class="col-lg-5">
+                <div class="card sticky-top" style="top: 1.5rem;">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">Order Summary</h5>
+
+                        {# Package info #}
+                        <div class="d-flex gap-3 mb-3">
+                            <img
+                                src="{{ package.image_url ?? 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800' }}"
+                                class="rounded"
+                                style="width:80px; height:60px; object-fit:cover;"
+                                alt="{{ package.title }}"
+                            >
+                            <div>
+                                <p class="fw-semibold mb-0">{{ package.title }}</p>
+                                <p class="text-muted small mb-0">{{ package.duration_days }} days</p>
+                                <p class="text-muted small mb-0">Travel: {{ travel_date }}</p>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        {# Passenger breakdown #}
+                        <h6 class="fw-semibold mb-2">Passengers</h6>
+                        {% for passenger in passengers %}
+                            <div class="d-flex justify-content-between small mb-1">
+                                <span class="text-muted">
+                                    {{ passenger.first_name }} {{ passenger.last_name }}
+                                    <span class="badge bg-light text-dark ms-1">{{ passenger.type }}</span>
+                                </span>
+                                <span>
+                                    {% if passenger.price == 0 %}
+                                        Free
+                                    {% else %}
+                                        ${{ passenger.price }}
+                                    {% endif %}
+                                </span>
+                            </div>
+                        {% endfor %}
+
+                        <hr>
+
+                        {# Price breakdown #}
+                        <div class="d-flex justify-content-between small mb-1">
+                            <span class="text-muted">Subtotal</span>
+                            <span>${{ pricing.subtotal }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between small mb-1">
+                            <span class="text-muted">Tax (15%)</span>
+                            <span>${{ (pricing.total - pricing.subtotal)|round(2) }}</span>
+                        </div>
+
+                        <hr>
+
+                        <div class="d-flex justify-content-between fw-bold">
+                            <span>Total</span>
+                            <span class="text-teal">${{ pricing.total }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <a href="{{ basePath }}/booking/{{ package.id }}" class="btn btn-outline-secondary w-100 mt-3">
+                    ← Go Back
+                </a>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // ── Card number formatting ──
+    document.querySelector('[name="card_number"]').addEventListener('input', function () {
+        let value = this.value.replace(/\D/g, '').substring(0, 16);
+        this.value = value.replace(/(.{4})/g, '$1 ').trim();
+    });
+
+    // ── Expiry formatting ──
+    document.querySelector('[name="expiry"]').addEventListener('input', function () {
+        let value = this.value.replace(/\D/g, '').substring(0, 4);
+        if (value.length >= 2) value = value.substring(0, 2) + '/' + value.substring(2);
+        this.value = value;
+    });
+</script>
+{% endblock %}
