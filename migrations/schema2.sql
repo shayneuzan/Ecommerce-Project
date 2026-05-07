@@ -1,5 +1,5 @@
 ALTER TABLE booking
-ADD COLUMN reference VARCHAR(20) NULL UNIQUE AFTER package_id,
+ADD COLUMN reference VARCHAR(50) NULL UNIQUE AFTER package_id,
 ADD COLUMN travel_date DATE NOT NULL AFTER booking_date,
 ADD COLUMN payment_status ENUM('unpaid', 'paid', 'failed') NOT NULL DEFAULT 'unpaid' AFTER status,
 ADD COLUMN created_at DATETIME DEFAULT CURRENT_TIMESTAMP AFTER payment_status;
