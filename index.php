@@ -2,6 +2,13 @@
 
 declare(strict_types=1);
 
+require_once __DIR__ . '/vendor/autoload.php';
+
+if (file_exists(__DIR__ . '/.env')) {
+    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+    $dotenv->load();
+}
+
 session_start();
 
 use Slim\Factory\AppFactory;
@@ -28,6 +35,7 @@ use App\Models\BookingModel;
 use App\Services\PricingService;
 use App\Controllers\FavoriteController;
 use App\Models\FavoriteModel;
+use App\Controllers\ChatBotController;
 
 require __DIR__ . '/vendor/autoload.php';
 
@@ -114,6 +122,10 @@ $container->set(BookingController::class, fn() => new BookingController(
 $container->set(FavoriteController::class, fn() => new FavoriteController(
     $twig,
     new FavoriteModel(),
+    $basePath
+));
+
+$container->set(ChatBotController::class, fn() => new ChatBotController(
     $basePath
 ));
 
@@ -241,6 +253,8 @@ $app->get('/booking/confirmation/{id}', [BookingController::class, 'confirmation
 //Favorite routes
 $app->get('/favorite', [FavoriteController::class, 'index']);
 $app->post('/favorite/toggle/{packageId}', [FavoriteController::class, 'toggle']);
+
+$app->post('/chat/message', [ChatBotController::class, 'message']);
 
 //API endpoint for AJAX live search
 $app->get('/api/packages/search', function ($request, $response) {

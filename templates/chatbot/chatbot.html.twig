@@ -1,0 +1,160 @@
+{% if app_authenticated ?? false %}
+
+<div id="chatbot-wrapper">
+
+    {# ── Toggle Button ── #}
+    <button id="chatbot-toggle" class="btn btn-teal" title="Chat with Trava">
+        ?
+    </button>
+
+    {# ── Chat Window ── #}
+    <div id="chatbot-window" class="d-none">
+        <div id="chatbot-header">
+            <span>The answers to your questions HERE</span>
+            <button id="chatbot-close">✕</button>
+        </div>
+
+        <div id="chatbot-messages">
+            <div class="chat-msg bot">
+                Hi! How can I help you?
+            </div>
+        </div>
+
+        <div id="chatbot-input-area">
+            <input
+                type="text"
+                id="chatbot-input"
+                placeholder="Ask me anything about travel..."
+                autocomplete="off"
+            >
+            <button id="chatbot-send">Send</button>
+        </div>
+    </div>
+
+</div>
+
+<style>
+#chatbot-wrapper {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 9999;
+    font-family: 'DM Sans', sans-serif;
+}
+
+#chatbot-toggle {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    font-size: 1.4rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    border: none;
+}
+
+#chatbot-window {
+    position: absolute;
+    bottom: 70px;
+    right: 0;
+    width: 340px;
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+    background: white;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+#chatbot-header {
+    background: #0f2b46;
+    color: white;
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+#chatbot-close {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+#chatbot-messages {
+    height: 320px;
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.chat-msg {
+    max-width: 80%;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-size: 0.875rem;
+    line-height: 1.5;
+}
+
+.chat-msg.bot {
+    background: #f0f4f8;
+    color: #1a1a1a;
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+}
+
+.chat-msg.user {
+    background: #2a9d8f;
+    color: white;
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+}
+
+.chat-msg.typing {
+    background: #f0f4f8;
+    color: #999;
+    align-self: flex-start;
+    font-style: italic;
+}
+
+#chatbot-input-area {
+    display: flex;
+    border-top: 1px solid #eee;
+    padding: 10px;
+    gap: 8px;
+}
+
+#chatbot-input {
+    flex: 1;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 0.875rem;
+    outline: none;
+}
+
+#chatbot-input:focus {
+    border-color: #2a9d8f;
+}
+
+#chatbot-send {
+    background: #2a9d8f;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 14px;
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+#chatbot-send:hover {
+    background: #238276;
+}
+</style>
+
+{% endif %}
