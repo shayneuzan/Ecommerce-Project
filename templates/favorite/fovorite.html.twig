@@ -1,0 +1,98 @@
+   {% extends "layout.html.twig" %}
+
+{% block title %}My Favourites{% endblock %}
+
+{% block content %}
+
+<section class="page-hero">
+    <div class="container">
+        <h1 class="page-hero-title">My Favourites</h1>
+        <p class="page-hero-subtitle">Packages you have saved</p>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="row g-4">
+            {% for package in favorites %}
+                <div class="col-md-6 col-xl-4">
+                    <div class="card package-card h-100">
+                        <img
+                            src="{{ package.image_url|default('https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800') }}"
+                            onerror="this.src='{{ base_path ~ '/assets/images/no-image.jpg' }}'"
+                            class="card-img-top package-card-img"
+                            alt="{{ package.title }}"
+                            loading="lazy"
+                        >
+                        <div class="card-body d-flex flex-column">
+                            <p class="package-destination">{{ package.city }}</p>
+                            <h5 class="card-title package-title">{{ package.title }}</h5>
+                            <p class="card-text text-muted small flex-grow-1">{{ package.description }}</p>
+                            <div class="d-flex gap-3 my-2">
+                                <span class="small text-muted">{{ package.duration_days }} days</span>
+                                <span class="small text-muted">{{ package.available_slots }} slots left</span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center pt-2 border-top">
+                                <div>
+                                    <div class="price-label">From</div>
+                                    <div class="price-value">${{ package.price }}<span class="price-per">/person</span></div>
+                                </div>
+                                <div class="d-flex gap-2">
+                                    <button
+                                        class="btn btn-sm btn-outline-danger favourite-btn"
+                                        data-package-id="{{ package.id }}"
+                                        title="Remove from favourites"
+                                    >♥</button>
+                                    <a href="{{ base_path }}/packages/{{ package.id }}" class="btn btn-teal btn-sm">View Deal</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="col-12 text-center py-5 text-muted">
+                    <p class="fs-5 mb-3">You have no saved packages yet.</p>
+                    <a href="{{ base_path }}/packages" class="btn btn-teal px-4">Browse Packages</a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const BASE_PATH = "{{ base_path }}";
+
+    document.querySelectorAll('.favourite-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const packageId = this.dataset.packageId;
+            const card      = this.closest('.col-md-6');
+
+            fetch(`${BASE_PATH}/favorite/toggle/${packageId}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (!data.liked) {
+                    // Remove card from page
+                    card.remove();
+
+                    // If no cards left show empty message
+                    if (document.querySelectorAll('.package-card').length === 0) {
+                        document.querySelector('.row').innerHTML = `
+                            <div class="col-12 text-center py-5 text-muted">
+                                <p class="fs-5 mb-3">You have no saved packages yet.</p>
+                                <a href="${BASE_PATH}/packages" class="btn btn-teal px-4">Browse Packages</a>
+                            </div>
+                        `;
+                    }
+                }
+            })
+            .catch(console.error);
+        });
+    });
+</script>
+{% endblock %}

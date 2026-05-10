@@ -24,7 +24,14 @@
 <section class="py-5">
     <div class="container">
 
-       
+        {# ── Page Header ── #}
+        <div class="mb-4">
+            <a href="{{ basePath }}/packages/{{ package.id }}" class="text-muted small text-decoration-none">
+                ← Back to package
+            </a>
+            <h2 class="section-title mt-2">Book Your Trip</h2>
+            <p class="text-muted">{{ package.title }}</p>
+        </div>
 
         <div class="row g-4">
 

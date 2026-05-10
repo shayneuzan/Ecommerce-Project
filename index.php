@@ -26,6 +26,8 @@ use App\Services\FlashHelper;
 use App\Controllers\BookingController;
 use App\Models\BookingModel;
 use App\Services\PricingService;
+use App\Controllers\FavoriteController;
+use App\Models\FavoriteModel;
 
 require __DIR__ . '/vendor/autoload.php';
 
@@ -106,6 +108,12 @@ $container->set(BookingController::class, fn() => new BookingController(
     $twig,
     new BookingModel(),
     new PricingService(),
+    $basePath
+));
+
+$container->set(FavoriteController::class, fn() => new FavoriteController(
+    $twig,
+    new FavoriteModel(),
     $basePath
 ));
 
@@ -229,6 +237,10 @@ $app->post('/booking/calculate', [BookingController::class, 'calculatePrice']);
 $app->post('/booking/checkout/{id}', [BookingController::class, 'checkout']);
 $app->post('/booking/process', [BookingController::class, 'payment']);
 $app->get('/booking/confirmation/{id}', [BookingController::class, 'confirmation']);
+
+//Favorite routes
+$app->get('/favorite', [FavoriteController::class, 'index']);
+$app->post('/favorite/toggle/{packageId}', [FavoriteController::class, 'toggle']);
 
 //API endpoint for AJAX live search
 $app->get('/api/packages/search', function ($request, $response) {

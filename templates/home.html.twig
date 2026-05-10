@@ -56,6 +56,10 @@
                                     <div class="price-label">From</div>
                                     <div class="price-value">${{ package.price }}<span class="price-per">/person</span></div>
                                 </div>
+                                <button class="btn btn-sm favourite-btn {{ package.id in favouriteIds ? 'btn-danger' : 'btn-outline-danger' }}"
+                                         data-package-id="{{ package.id }}" title="Save to favourites">
+                                            &hearts;
+                                </button>
                                 <a href="{{ base_path }}/packages/{{ package.id }}" class="btn btn-teal btn-sm">View Deal</a>
                             </div>
                         </div>

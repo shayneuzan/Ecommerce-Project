@@ -17,6 +17,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Twig\Environment;
 use App\Services\FlashHelper;
+use App\Models\FavoriteModel;
 
 class PackageController
 {
@@ -50,6 +51,12 @@ class PackageController
 
         $countries = $this->model->getCountries();
 
+        $favouriteModel = new FavoriteModel();
+        $favouriteIds   = $_SESSION['authenticated'] ?? false
+        ? $favouriteModel->getUserFavoriteId($_SESSION['user_id'])
+        : [];
+
+
         $html = $this->twig->render('packages/index.html.twig', [
             'base_path'        => $this->basePath,
             'app_lang'         => $_SESSION['lang'] ?? 'en',
@@ -59,6 +66,7 @@ class PackageController
             'app_authenticated' => $_SESSION['authenticated'] ?? false,
             'app_user_name'    => $_SESSION['user_name'] ?? '',
             'app_role'         => $_SESSION['user_role'] ?? '',
+            'favouriteIds' => $favouriteIds,
         ]);
 
         $response->getBody()->write($html);

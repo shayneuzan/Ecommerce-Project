@@ -67,3 +67,29 @@ document.addEventListener('DOMContentLoaded', function () {
         `).join('');
     }
 });
+
+
+
+   document.addEventListener('click', function(e) {
+    const btn = e.target.closest('.favourite-btn');
+    if (!btn) return;
+
+    const basePath  = document.getElementById('base-path').value;
+    const packageId = btn.dataset.packageId;
+
+    fetch(`${basePath}/favorite/toggle/${packageId}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+    })
+    .then(r => r.json())
+    .then(data => {
+        if (data.liked) {
+            btn.classList.remove('btn-outline-danger');
+            btn.classList.add('btn-danger');
+        } else {
+            btn.classList.remove('btn-danger');
+            btn.classList.add('btn-outline-danger');
+        }
+    })
+    .catch(console.error);
+});
