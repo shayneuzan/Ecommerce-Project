@@ -9,7 +9,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (!toggle) return; 
 
-    const basePath = document.getElementById('base-path')?.value || '/traventa';
+    // const basePath = document.getElementById('base-path')?.value || '/traventa';
+    const el = document.getElementById('base-path');
+    const basePath = el !== null ? el.value : '/traventa';
 
     toggle.addEventListener('click', () => {
         window_.classList.toggle('d-none');
