@@ -216,7 +216,10 @@ class BookingController
             'booking' => $booking->export(),
             'passengers' => $passengers,
             'package' => $package->export(),
-            'app_lang' => $_SESSION['lang'] ?? 'en'
+            'app_lang' => $_SESSION['lang'] ?? 'en',
+            'app_authenticated' => $_SESSION['authenticated'] ?? false,
+            'app_user_name'     => $_SESSION['user_name'] ?? '',
+            'app_role'          => $_SESSION['user_role'] ?? '',
         ]);
 
         $response->getBody()->write($html);
