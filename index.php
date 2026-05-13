@@ -244,6 +244,7 @@ $app->group('/admin', function($group) {
 })->add($adminMiddleware);
 
 // Booking routes for customer flow
+$app->get('/bookings', [BookingController::class, 'index']);
 $app->get('/bookings/create/{id}', [BookingController::class, 'showBooking']);
 $app->post('/booking/calculate', [BookingController::class, 'calculatePrice']);
 $app->post('/booking/checkout/{id}', [BookingController::class, 'checkout']);

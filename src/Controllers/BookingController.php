@@ -28,6 +28,34 @@ class BookingController
         $this->basePath = $basePath;
     } 
 
+
+    public function index(Request $request, Response $response): Response
+    {
+        $userId = $_SESSION['user_id'] ?? null;
+
+        if (!$userId) {
+            return $response
+                ->withHeader('Location', $this->basePath . '/auth/login')
+                ->withStatus(302);
+        }
+
+        $bookings = $this->model->findByUser($userId);
+
+        $html = $this->twig->render('bookings/index.html.twig', [
+            'base_path'         => $this->basePath,
+            'app_authenticated' => $_SESSION['authenticated'] ?? false,
+            'app_user_name'     => $_SESSION['user_name'] ?? '',
+            'app_role'          => $_SESSION['user_role'] ?? '',
+            'app_lang'          => $_SESSION['lang'] ?? 'en',
+            'bookings'          => $bookings,
+        ]);
+
+        $response->getBody()->write($html);
+        return $response;
+    }
+
+
+
     public function showBooking(Request $request, Response $response, array $args): Response
     {
         $packageId = (int) $args['id'];

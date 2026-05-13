@@ -17,6 +17,11 @@ class BookingModel {
         return $booking->id ? $booking : null;
     }
 
+    public function findByUser(int $userId): array
+    {
+        return R::find('booking', 'user_id = ? ORDER BY created_at DESC', [$userId]);
+    }
+
     public function create(array $data): int
     {
         $booking = R::dispense('booking');
