@@ -25,6 +25,7 @@ class AuthController
         $html = $this->twig->render('auth/register.html.twig', [
             'base_path' => $this->basePath,
             'step'      => 'register',
+            'app_lang'  => $_SESSION['lang'] ?? 'en',
         ]);
         $response->getBody()->write($html);
         return $response;
@@ -95,6 +96,7 @@ class AuthController
     {
         $html = $this->twig->render('auth/login.html.twig', [
             'base_path' => $this->basePath,
+            'app_lang'  => $_SESSION['lang'] ?? 'en',
         ]);
         $response->getBody()->write($html);
         return $response;
@@ -148,6 +150,7 @@ class AuthController
 
         $html = $this->twig->render('auth/verify.html.twig', [
             'base_path' => $this->basePath,
+            'app_lang'  => $_SESSION['lang'] ?? 'en',
         ]);
         $response->getBody()->write($html);
         return $response;

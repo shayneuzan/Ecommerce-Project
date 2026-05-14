@@ -37,6 +37,10 @@ use App\Controllers\FavoriteController;
 use App\Models\FavoriteModel;
 use App\Controllers\ChatBotController;
 
+use Symfony\Component\Translation\Loader\ArrayLoader;
+use Symfony\Component\Translation\Translator;
+use Twig\TwigFunction;
+
 require __DIR__ . '/vendor/autoload.php';
 
 // ─── 1. ENVIRONMENT ───────────────────────────────────────────────────────────
@@ -60,6 +64,19 @@ $twig   = new Environment($loader, [
 
 // Make flash messages available in all Twig templates as 'flash'
 $twig->addGlobal('flash', FlashHelper::get()); 
+
+
+// ─── I18N ─────────────────────────────────────────────────────────────────────
+$translator = new Translator($_SESSION['lang'] ?? 'en');
+$translator->addLoader('array', new ArrayLoader());
+$translator->addResource('array', require __DIR__ . '/translations/messages.en.php', 'en');
+$translator->addResource('array', require __DIR__ . '/translations/messages.fr.php', 'fr');
+
+$twig->addFunction(new TwigFunction('trans', function (string $key, array $params = []) use ($translator) {
+    $locale = $_SESSION['lang'] ?? 'en';
+    return $translator->trans($key, $params, null, $locale);
+}));
+
 
 // ─── 4. DEPENDENCY INJECTION CONTAINER ───────────────────────────────────────
 $basePath = $_ENV['APP_BASE_PATH'] ?? '/traventa';
@@ -277,6 +294,15 @@ $app->get('/api/packages/search', function ($request, $response) {
 
     $response->getBody()->write(json_encode($payload, JSON_THROW_ON_ERROR));
     return $response->withHeader('Content-Type', 'application/json');
+});
+
+// Language switcher route
+$app->get('/lang/{locale}', function ($request, $response, $args) use ($basePath) {
+    $allowed = ['en', 'fr'];
+    if (in_array($args['locale'], $allowed)) {
+        $_SESSION['lang'] = $args['locale'];
+    }
+    return $response->withHeader('Location', $basePath . '/')->withStatus(302);
 });
 
 // ─── 8. RUN ───────────────────────────────────────────────────────────────────

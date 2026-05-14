@@ -2,7 +2,7 @@
 
 {% extends "layout.html.twig" %}
 
-{% block title %}Book {{ package.title }}{% endblock %}
+{% block title %}{{ trans('bookings.book_package') }} {{ package.title }}{% endblock %}
 
 {% block content %}
 
@@ -11,8 +11,8 @@
     <div class="container">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ base_path }}/" class="text-dark">Home</a></li>
-                <li class="breadcrumb-item"><a href="{{ base_path }}/packages" class="text-dark">Packages</a></li>
+                <li class="breadcrumb-item"><a href="{{ base_path }}/" class="text-dark">{{ trans('nav.home') }}</a></li>
+                <li class="breadcrumb-item"><a href="{{ base_path }}/packages" class="text-dark">{{ trans('nav.packages') }}</a></li>
                 <li class="breadcrumb-item active text-dark">{{ package.title }}</li>
             </ol>
         </nav>
@@ -27,9 +27,9 @@
         {# ── Page Header ── #}
         <div class="mb-4">
             <a href="{{ basePath }}/packages/{{ package.id }}" class="text-muted small text-decoration-none">
-                ← Back to package
+                ← {{ trans('bookings.back_to_package') }}
             </a>
-            <h2 class="section-title mt-2">Book Your Trip</h2>
+            <h2 class="section-title mt-2">{{ trans('bookings.book_your_trip') }}</h2>
             <p class="text-muted">{{ package.title }}</p>
         </div>
 
@@ -46,9 +46,9 @@
                     {# ── Travel Date ── #}
                     <div class="card mb-4">
                         <div class="card-body">
-                            <h5 class="card-title mb-3">Travel Date</h5>
+                            <h5 class="card-title mb-3">{{ trans('bookings.travel_date') }}</h5>
                             <div class="col-md-6">
-                                <label for="travel_date" class="form-label">Select your departure date</label>
+                                <label for="travel_date" class="form-label">{{ trans('bookings.select_departure_date') }}</label>
                                 <input
                                     type="date"
                                     class="form-control"
@@ -65,9 +65,9 @@
                     <div class="card mb-4">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-center mb-3">
-                                <h5 class="card-title mb-0">Passengers</h5>
+                                <h5 class="card-title mb-0">{{ trans('bookings.passengers') }}</h5>
                                 <button type="button" class="btn btn-outline-teal btn-sm" id="addPassenger">
-                                    + Add Passenger
+                                    + {{ trans('bookings.add_passenger') }}
                                 </button>
                             </div>
 
@@ -79,15 +79,15 @@
                                     </div>
                                     <div class="row g-2">
                                         <div class="col-md-4">
-                                            <label class="form-label small">First Name</label>
+                                            <label class="form-label small">{{ trans('bookings.first_name') }}</label>
                                             <input type="text" class="form-control form-control-sm" name="passengers[0][first_name]" required>
                                         </div>
                                         <div class="col-md-4">
-                                            <label class="form-label small">Last Name</label>
+                                            <label class="form-label small">{{ trans('bookings.last_name') }}</label>
                                             <input type="text" class="form-control form-control-sm" name="passengers[0][last_name]" required>
                                         </div>
                                         <div class="col-md-4">
-                                            <label class="form-label small">Age</label>
+                                            <label class="form-label small">{{ trans('bookings.age') }}</label>
                                             <input type="number" class="form-control form-control-sm passenger-age" name="passengers[0][age]" min="0" max="120" required>
                                         </div>
                                     </div>
@@ -95,15 +95,17 @@
                             </div>
 
                             <p class="text-muted small mt-2 mb-0">
-                                Infant (0–2): free &nbsp;·&nbsp;
-                                Child (3–12): 20% off &nbsp;·&nbsp;
-                                Senior (60+): 20% off
+                                {{ trans('bookings.infant_rule') }}
+                                &nbsp;·&nbsp;
+                                {{ trans('bookings.child_rule') }}
+                                &nbsp;·&nbsp;
+                                {{ trans('bookings.senior_rule') }}
                             </p>
                         </div>
                     </div>
 
                     <button type="submit" class="btn btn-teal btn-lg w-100">
-                        Proceed to Checkout →
+                        {{ trans('bookings.proceed_checkout') }} →
                     </button>
 
                 </form>
@@ -126,22 +128,22 @@
                         <hr>
 
                         {# Price breakdown — updated via JS #}
-                        <h6 class="fw-semibold mb-3">Price Summary</h6>
+                        <h6 class="fw-semibold mb-3">{{ trans('bookings.price_summary') }}</h6>
 
                         <div id="priceSummary">
                             <p class="text-muted small text-center py-3">
-                                Add a travel date and passengers to see pricing.
+                                {{ trans('bookings.add_date_passengers') }}
                             </p>
                         </div>
 
                         <hr>
 
                         <div class="d-flex justify-content-between fw-bold">
-                            <span>Total</span>
+                            <span>{{ trans('bookings.total') }}</span>
                             <span class="text-teal" id="totalPrice">—</span>
                         </div>
 
-                        <p class="text-muted small mt-2 mb-0">Includes all taxes and fees</p>
+                        <p class="text-muted small mt-2 mb-0">{{ trans('bookings.includes_taxes') }}</p>
                     </div>
                 </div>
             </div>
@@ -168,20 +170,20 @@
         row.dataset.index = index;
         row.innerHTML = `
             <div class="d-flex justify-content-between align-items-center mb-2">
-                <span class="fw-semibold small text-muted">Passenger ${index + 1}</span>
-                <button type="button" class="btn btn-sm btn-outline-danger remove-passenger">Remove</button>
+                <span class="fw-semibold small text-muted">{{ trans('bookings.passenger') }} ${index + 1}</span>
+                <button type="button" class="btn btn-sm btn-outline-danger remove-passenger">{{ trans('bookings.remove') }}</button>
             </div>
             <div class="row g-2">
                 <div class="col-md-4">
-                    <label class="form-label small">First Name</label>
+                    <label class="form-label small">{{ trans('bookings.first_name') }}</label>
                     <input type="text" class="form-control form-control-sm" name="passengers[${index}][first_name]" required>
                 </div>
                 <div class="col-md-4">
-                    <label class="form-label small">Last Name</label>
+                    <label class="form-label small">{{ trans('bookings.last_name') }}</label>
                     <input type="text" class="form-control form-control-sm" name="passengers[${index}][last_name]" required>
                 </div>
                 <div class="col-md-4">
-                    <label class="form-label small">Age</label>
+                    <label class="form-label small">{{ trans('bookings.age') }}</label>
                     <input type="number" class="form-control form-control-sm passenger-age" name="passengers[${index}][age]" min="0" max="120" required>
                 </div>
             </div>
@@ -241,7 +243,7 @@
         let rows = '';
         data.breakdown.forEach(p => {
             const label = p.type.charAt(0).toUpperCase() + p.type.slice(1);
-            const price = p.price === 0 ? 'Free' : `$${p.price.toFixed(2)}`;
+            const price = p.price === 0 ? '{{ trans('bookings.free') }}' : `$${p.price.toFixed(2)}`;
             rows += `
                 <div class="d-flex justify-content-between small mb-1">
                     <span class="text-muted">${label} (age ${p.age})</span>
@@ -252,11 +254,11 @@
 
         rows += `
             <div class="d-flex justify-content-between small mb-1 mt-2 pt-2 border-top">
-                <span class="text-muted">Subtotal</span>
+                <span class="text-muted">{{ trans('bookings.subtotal') }}</span>
                 <span>$${data.subtotal.toFixed(2)}</span>
             </div>
             <div class="d-flex justify-content-between small mb-1">
-                <span class="text-muted">Tax (15%)</span>
+                <span class="text-muted">{{ trans('bookings.tax') }} (15%)</span>
                 <span>$${(data.total - data.subtotal).toFixed(2)}</span>
             </div>
         `;

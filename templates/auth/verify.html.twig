@@ -1,6 +1,6 @@
 {% extends 'layout.html.twig' %}
 
-{% block title %}Two-Factor Authentication — Traventa{% endblock %}
+{% block title %}{{ trans('auth.two_factor_page_title') }} — Traventa{% endblock %}
 
 {% block content %}
 <div class="container py-5">
@@ -8,10 +8,9 @@
         <div class="col-md-5">
             <div class="card shadow-sm border-0">
                 <div class="card-body p-4 text-center">
-                    <h4 class="mb-1">Two-Factor Authentication</h4>
-                    <p class="text-muted mb-4">Open your authenticator app and enter the 6-digit code for Traventa.</p>
+                    <h4 class="mb-1">{{ trans('auth.two_factor_heading') }}</h4>
+                    <p class="text-muted mb-4">{{ trans('auth.two_factor_verify_subtitle') }}</p>
 
-                    {# ── Flash messages ── #}
                     {% if flash is defined %}
                         {% for type, messages in flash %}
                             {% for message in messages %}
@@ -38,18 +37,22 @@
                                 type="text" 
                                 name="code" 
                                 class="form-control form-control-lg text-center" 
-                                placeholder="000000"
+                                placeholder="{{ trans('auth.code_placeholder') }}"
                                 maxlength="6"
                                 autocomplete="one-time-code"
                                 autofocus
                                 required>
                         </div>
-                        <button type="submit" class="btn btn-success w-100">Verify</button>
+                        <button type="submit" class="btn btn-success w-100">
+                            {{ trans('auth.verify_btn') }}
+                        </button>
                     </form>
 
                     <hr class="my-3">
                     <p class="text-center text-muted small mb-0">
-                        <a href="{{ base_path }}/auth/login">← Back to login</a>
+                        <a href="{{ base_path }}/auth/login">
+                            ← {{ trans('auth.back_to_login') }}
+                        </a>
                     </p>
                 </div>
             </div>

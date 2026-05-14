@@ -37,15 +37,15 @@
             <div class="collapse navbar-collapse" id="navbarMain">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ base_path }}/packages">Packages</a>
+                        <a class="nav-link" href="{{ base_path }}/packages">{{ trans('nav.packages') }}</a>
                     </li>  
                                     
                     {% if app_authenticated ?? false %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ base_path }}/bookings">My Bookings</a>
+                            <a class="nav-link" href="{{ base_path }}/bookings">{{ trans('nav.my_bookings') }}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ base_path }}/favorite">Favourites</a>
+                            <a class="nav-link" href="{{ base_path }}/favorite">{{ trans('nav.favourites') }}</a>
                         </li>
                     {% endif %}
                 </ul>
@@ -61,11 +61,11 @@
                     {% if app_authenticated ?? false %}
                         <span class="text-white-50 small">{{ app_user_name ?? 'Account' }}</span>
                         <form action="{{ base_path }}/auth/logout" method="POST">
-                            <button type="submit" class="btn btn-outline-light btn-sm">Logout</button>
+                            <button type="submit" class="btn btn-outline-light btn-sm">{{ trans('nav.logout') }}</button>
                         </form>
                     {% else %}
-                        <a href="{{ base_path }}/auth/login" class="btn btn-outline-light btn-sm">Login</a>
-                        <a href="{{ base_path }}/auth/register" class="btn btn-teal btn-sm">Sign Up</a>
+                        <a href="{{ base_path }}/auth/login" class="btn btn-outline-light btn-sm">{{ trans('nav.login') }}</a>
+                        <a href="{{ base_path }}/auth/register" class="btn btn-teal btn-sm">{{ trans('nav.signup') }}</a>
                     {% endif %}
 
                 </div>
@@ -82,11 +82,11 @@
     <footer class="footer bg-navy text-white mt-auto py-5">
         <div class="container text-center">
             <p class="footer-brand mb-1">Traventa</p>
-            <p class="text-white-50 small mb-3">Your next adventure is one click away.</p>
+            <p class="text-white-50 small mb-3">{{ trans('footer.tagline') }}</p>
             <div class="d-flex justify-content-center gap-4 mb-3">
-                <a href="{{ base_path }}/packages" class="text-white-50 small text-decoration-none footer-link">Packages</a>
-                <a href="{{ base_path }}/auth/login" class="text-white-50 small text-decoration-none footer-link">Login</a>
-                <a href="{{ base_path }}/auth/register" class="text-white-50 small text-decoration-none footer-link">Sign Up</a>
+                <a href="{{ base_path }}/packages" class="text-white-50 small text-decoration-none footer-link">{{ trans('nav.packages') }}</a>
+                <a href="{{ base_path }}/auth/login" class="text-white-50 small text-decoration-none footer-link">{{ trans('nav.login') }}</a>
+                <a href="{{ base_path }}/auth/register" class="text-white-50 small text-decoration-none footer-link">{{ trans('nav.signup') }}</a>
             </div>
             <p class="text-white-50 small mb-0">&copy; {{ "now"|date("Y") }} Traventa — eCommerce Winter 2026</p>
         </div>

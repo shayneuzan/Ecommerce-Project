@@ -1,6 +1,5 @@
 {# homepage (hero and 4 featured packages) #}
 
-
 {% extends "layout.html.twig" %}
 
 {% block title %}Home{% endblock %}
@@ -12,12 +11,12 @@
     <div class="container">
         <div class="row justify-content-center text-center">
             <div class="col-lg-7">
-                <h1 class="hero-title">Your next adventure <span class="text-teal">starts here.</span></h1>
-                <p class="hero-subtitle">Browse handpicked vacation packages to the world's most beautiful destinations. Hotels, guides and memories included.</p>
+                <h1 class="hero-title">{{ trans('home.hero_title') }} <span class="text-teal">{{ trans('home.hero_starts') }}</span></h1>
+                <p class="hero-subtitle">{{ trans('home.hero_subtitle') }}</p>
                 <div class="d-flex gap-3 justify-content-center flex-wrap">
-                    <a href="{{ base_path }}/packages" class="btn btn-teal btn-lg px-4">Browse Packages</a>
+                    <a href="{{ base_path }}/packages" class="btn btn-teal btn-lg px-4">{{ trans('home.browse') }}</a>
                     {% if not (app_authenticated ?? false) %}
-                        <a href="{{ base_path }}/auth/register" class="btn btn-outline-light btn-lg px-4">Create Account</a>
+                        <a href="{{ base_path }}/auth/register" class="btn btn-outline-light btn-lg px-4">{{ trans('home.create_account') }}</a>
                     {% endif %}
                 </div>
             </div>
@@ -29,8 +28,8 @@
 <section class="py-5">
     <div class="container">
         <div class="mb-4">
-            <h2 class="section-title">Popular Destinations</h2>
-            <p class="text-muted">Explore our most booked vacation packages</p>
+            <h2 class="section-title">{{ trans('home.popular') }}</h2>
+            <p class="text-muted">{{ trans('home.explore') }}</p>
         </div>
 
         <div class="row g-4">
@@ -48,19 +47,19 @@
                             <h5 class="card-title package-title">{{ package.title }}</h5>
                             <p class="card-text text-muted small flex-grow-1">{{ package.description }}</p>
                             <div class="d-flex gap-3 my-2">
-                                <span class="small text-muted">{{ package.duration_days }} days</span>
-                                <span class="small text-muted">{{ package.available_slots }} slots left</span>
+                                <span class="small text-muted">{{ package.duration_days }} {{ trans('home.days') }}</span>
+                                <span class="small text-muted">{{ package.available_slots }} {{ trans('home.slots_left') }}</span>
                             </div>
                             <div class="d-flex justify-content-between align-items-center pt-2 border-top">
                                 <div>
-                                    <div class="price-label">From</div>
+                                    <div class="price-label">{{ trans('home.from') }}</div>
                                     <div class="price-value">${{ package.price }}<span class="price-per">/person</span></div>
                                 </div>
                                 <button class="btn btn-sm favourite-btn {{ package.id in favouriteIds ? 'btn-danger' : 'btn-outline-danger' }}"
                                          data-package-id="{{ package.id }}" title="Save to favourites">
                                             &hearts;
                                 </button>
-                                <a href="{{ base_path }}/packages/{{ package.id }}" class="btn btn-teal btn-sm">View Deal</a>
+                                <a href="{{ base_path }}/packages/{{ package.id }}" class="btn btn-teal btn-sm">{{ trans('home.view_deal') }}</a>
                             </div>
                         </div>
                     </div>
@@ -73,7 +72,7 @@
         </div>
 
         <div class="text-center mt-4">
-            <a href="{{ base_path }}/packages" class="btn btn-outline-navy btn-lg px-5">View All Packages</a>
+            <a href="{{ base_path }}/packages" class="btn btn-outline-navy btn-lg px-5">{{ trans('home.view_all') }}</a>
         </div>
     </div>
 </section>
