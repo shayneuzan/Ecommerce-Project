@@ -192,6 +192,10 @@ $authMiddleware  = new AuthMiddleware($app->getResponseFactory(), $basePath); //
 
 // ─── 7. ROUTES ────────────────────────────────────────────────────────────────
 $app->get('/', function ($request, $response) use ($twig, $basePath) {
+    if (($_SESSION['user_role'] ?? '') === 'admin') {
+        return $response->withHeader('Location', $basePath . '/admin')->withStatus(302);
+    }
+
     $packages = R::findAll('package', 'LIMIT 4'); //limit to 4 packages as starter
 
     //attach destination city to each package

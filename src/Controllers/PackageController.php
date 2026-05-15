@@ -34,6 +34,10 @@ class PackageController
     //GET /packages — show all packages with search and filter support
     public function index(Request $request, Response $response): Response
     {
+        if (($_SESSION['user_role'] ?? '') === 'admin') {
+            return $response->withHeader('Location', $this->basePath . '/admin')->withStatus(302);
+        }
+
         $params = $request->getQueryParams();
 
         //read filter values from the URL query string
@@ -76,6 +80,10 @@ class PackageController
     //GET /packages/{id} — show a single package detail page
     public function show(Request $request, Response $response, array $args): Response
     {
+        if (($_SESSION['user_role'] ?? '') === 'admin') {
+            return $response->withHeader('Location', $this->basePath . '/admin')->withStatus(302);
+        }
+
         $package = $this->model->findById((int) $args['id']);
 
         //if package doesnt exist return a 404
