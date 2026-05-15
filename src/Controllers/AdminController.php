@@ -25,6 +25,13 @@ class AdminController {
     {
         $packages = R::findAll('package');
         $bookings = R::findAll('booking');
+
+        //attach user email and name to each booking
+        foreach ($bookings as $booking) {
+            $user = R::load('user', $booking->user_id);
+            $booking->user_email = $user->email ?? 'Unknown';
+            $booking->user_full_name = $user->first_name . ' ' . $user->last_name;
+        }
         $guides = R::findAll('guide');
         $hotels = R::findAll('hotel');
         $destinations = R::findAll('destination');

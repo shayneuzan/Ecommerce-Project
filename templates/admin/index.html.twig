@@ -180,7 +180,7 @@
                                 <table class="table align-middle">
                                     <thead class="table-light">
                                         <tr>
-                                            <th>User ID</th>
+                                            <th>User</th>
                                             <th>Package ID</th>
                                             <th>Date</th>
                                             <th>Total</th>
@@ -190,7 +190,7 @@
                                     <tbody>
                                         {% for booking in bookings %}
                                         <tr>
-                                            <td class="fw-bold">{{ booking.user_id }}</td>
+                                            <td class="fw-bold">{{ booking.user_full_name }}<br><small class="text-muted">{{ booking.user_email }}</small></td>
                                             <td>{{ booking.package_id }}</td>
                                             <td>{{ booking.booking_date|date('Y-m-d') }}</td>
                                             <td>${{ booking.total_price|number_format(2) }}</td>
