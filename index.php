@@ -65,6 +65,8 @@ $twig   = new Environment($loader, [
 // Make flash messages available in all Twig templates as 'flash'
 $twig->addGlobal('flash', FlashHelper::get()); 
 
+$twig->addGlobal('current_path', $_SERVER['REQUEST_URI']);
+
 
 // ─── I18N ─────────────────────────────────────────────────────────────────────
 $translator = new Translator($_SESSION['lang'] ?? 'en');
@@ -160,27 +162,27 @@ $app->addBodyParsingMiddleware();
 $app->addRoutingMiddleware();
 
 // Register the error middleware (shows errors in development)
-$app->addErrorMiddleware(true, true, true);
+// $app->addErrorMiddleware(true, true, true);
 
-// $displayErrors = ($_ENV['APP_ENV'] ?? 'production') === 'development';
+$displayErrors = ($_ENV['APP_ENV'] ?? 'production') === 'development';
 
-// $errorMiddleware = $app->addErrorMiddleware($displayErrors, true, true);
+$errorMiddleware = $app->addErrorMiddleware($displayErrors, true, true);
 
-// $errorMiddleware->setErrorHandler(
-//     \Slim\Exception\HttpNotFoundException::class,
-//     function ($request, $exception) use ($twig, $basePath) {
-//         $html = $twig->render('errors/404.html.twig', [
-//             'base_path'         => $basePath,
-//             'app_authenticated' => $_SESSION['authenticated'] ?? false,
-//             'app_user_name'     => $_SESSION['user_name'] ?? '',
-//             'app_role'          => $_SESSION['user_role'] ?? '',
-//             'app_lang'          => $_SESSION['lang'] ?? 'en',
-//         ]);
-//         $response = new \Slim\Psr7\Response();
-//         $response->getBody()->write($html);
-//         return $response->withStatus(404);
-//     }
-// );
+$errorMiddleware->setErrorHandler(
+    \Slim\Exception\HttpNotFoundException::class,
+    function ($request, $exception) use ($twig, $basePath) {
+        $html = $twig->render('errors/404.html.twig', [
+            'base_path'         => $basePath,
+            'app_authenticated' => $_SESSION['authenticated'] ?? false,
+            'app_user_name'     => $_SESSION['user_name'] ?? '',
+            'app_role'          => $_SESSION['user_role'] ?? '',
+            'app_lang'          => $_SESSION['lang'] ?? 'en',
+        ]);
+        $response = new \Slim\Psr7\Response();
+        $response->getBody()->write($html);
+        return $response->withStatus(404);
+    }
+);
 
 
 // ─── 6. MIDDLEWARE ────────────────────────────────────────────────────────────
@@ -298,11 +300,20 @@ $app->get('/api/packages/search', function ($request, $response) {
 
 // Language switcher route
 $app->get('/lang/{locale}', function ($request, $response, $args) use ($basePath) {
+
     $allowed = ['en', 'fr'];
+
     if (in_array($args['locale'], $allowed)) {
         $_SESSION['lang'] = $args['locale'];
     }
-    return $response->withHeader('Location', $basePath . '/')->withStatus(302);
+
+    $params = $request->getQueryParams();
+
+    $redirect = $params['redirect'] ?? ($basePath . '/');
+
+    return $response
+        ->withHeader('Location', $redirect)
+        ->withStatus(302);
 });
 
 // ─── 8. RUN ───────────────────────────────────────────────────────────────────
